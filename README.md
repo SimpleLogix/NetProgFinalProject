@@ -1,4 +1,23 @@
-# Client <-> Server multiple choice battlefield
+# Client <-> Server multiple choice battlefield v0.1
 
 ## What about GUI.py?
-- [x] Basic User Interface with tkinter and tkinter widgets
+- [x] Basic User Interface with tkinter widgets
+- [ ] Show player's score?
+- [ ] Start a new game
+- [x] Exit the game
+- [x] Show credits
+- [ ] Game instruction 
+- [ ] Visual styles(Colors, images, background?)
+
+## What about server.py?
+- [ ] Handle multiple clients?
+- [ ] Store questions?
+- [ ] Store answers?
+- [ ] Validate correctness of the answer provided by the clients?
+- [ ] Return a final score of the players after the last answer was given
+
+## What about client.py?
+- [ ] Send answer to the server?
+- [ ] Get a question from the server?
+- [ ] Get 4 distinct answers, one of which is correct and gives points
+
