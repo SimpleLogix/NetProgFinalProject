@@ -81,6 +81,7 @@ def gameStartedState():
                         padx=20,
                         pady=2,
                         width=20,
+                        bd=0,
                         height=4,
                         value=1)
 
@@ -89,6 +90,7 @@ def gameStartedState():
                          indicatoron=0,
                          padx=20,
                          width=20,
+                         bd=0,
                          height=4,
                          value=2)
 
@@ -97,6 +99,7 @@ def gameStartedState():
                         indicatoron=0,
                         padx=20,
                         width=20,
+                        bd=0,
                         height=4,
                         value=3)
 
@@ -105,6 +108,7 @@ def gameStartedState():
                          indicatoron=0,
                          padx=20,
                          width=20,
+                         bd=0,
                          height=4,
                          value=4)
 
@@ -121,6 +125,7 @@ def gameStartedState():
                           padx=20,
                           width=20,
                           height=3,
+                          bd=0,
                           command=sendToServer)
     submitButton.pack()
 

@@ -8,6 +8,7 @@
 - [x] Show credits
 - [ ] Game instruction 
 - [ ] Visual styles(Colors, images, background?)
+- [ ] Transition to leaderbord
 
 ## What about server.py?
 - [ ] Handle multiple clients?
