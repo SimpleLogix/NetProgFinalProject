@@ -1,4 +1,4 @@
-# Client <-> Server multiple choice battlefield v0.1
+# Client <-> Server multiple choice battlefield v0.2
 
 ## What about GUI.py?
 - [x] Basic User Interface with tkinter widgets
