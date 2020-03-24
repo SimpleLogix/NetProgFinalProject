@@ -12,34 +12,41 @@ from class will be manipulating to our application standards
 
 import socket
 
-def client_program():
-    
-    
-    # setting the IP and ports
-    clientIP = socket.gethostname()
-    serverIP = '127.0.0.1'
-    port = 7500
+# setting the IP and ports
+clientIP = socket.gethostname()
+port = 7500
 
-    #Open a socket and connect the client to the server
-    client_socket = socket.socket()
-    client_socket.connect((serverIP, port))
-    
+#Open a socket and connect the client to the server
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((clientIP, port))
+
+def client_program():
+   
+ 
     #sending the username
     user = input('Enter username: ')
     client_socket.send(user.encode())
 
-    #now we wait for the client to start the game (by typing 'start')
+    #now we wait for the client to start the game (by hitting 'Enter')
     data = client_socket.recv(1024).decode()
     print('From server: ' + data )
     
-    message = input(' -> ')                     #TODO: figure a way to wait for user to type 'start' 
+    message = input(' -> ')                     
     client_socket.send(message.encode())
-    serverResponse = client_socket.recv(1024).decode()
-    while serverResponse != 'OK':    
-        message = input(' -> ')
-        client_socket.send(message.encode())
-        serverResponse = client_socket.recv(1024).decode()
-    #client_socket.close()
+    
+    #--------------------------------------
+    # THE GAME BEGINS BELOW #TODO: game auto starts after 5 sec.
+    #---------------------------------------
+    gameStatus = 'Running'
+
+    for _i in range(3): #testing with 3 questions for now
+        question = client_socket.recv(1024).decode()
+        print(question)
+        answer = input('choose A | B | C | D : ')
+        client_socket.send(answer.encode())
+
+    print ("Thank you for playing!\n" + "Goodbye!")
+    client_socket.close()
 
 def send_answer():
     0
