@@ -2,8 +2,8 @@
 
 ## What about GUI.py?
 - [x] Basic User Interface with tkinter widgets
-- [ ] Show player's score?
-- [ ] Start a new game
+- [x] Show player's score
+- [x] Start a new game
 - [x] Exit the game
 - [x] Show credits
 - [ ] Game instruction 
