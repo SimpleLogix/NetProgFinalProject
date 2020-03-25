@@ -57,31 +57,38 @@ def now():
     return time.ctime(time.time())
 
 def handleClient(conn): #this is what shows up for each client
-    time.sleep(10)
+    #time.sleep(10)
 
     #receiving the usernames
     username = conn.recv(1024).decode()
     if not username:
         username = str(conn.address)
-
+    
+    print ("Welcome " + username)
+    conn.send('STATUS: CONNECTED'.encode()) #send before we receive
     #--------------------------------------
     # THE GAME BEGINS BELOW #TODO: game auto starts after 5 sec.
     #---------------------------------------
  
-    questions_number = 0
-    while questions_number <= 10 :
-        question_numbers = int([conn.recv(1024).decode()]) #store the client's question_number
-        question_ID = 'question' + str(question_numbers)
-        
-        conn.send(QUESTIONS[question_ID]['question'])
-        conn.send(QUESTIONS[question_ID]['choice1'])
-        conn.send(QUESTIONS[question_ID]['choice2'])
-        conn.send(QUESTIONS[question_ID]['choice3'])
-        conn.send(QUESTIONS[question_ID]['choice4'])
-        conn.send(QUESTIONS[question_ID]['answer'])
+    question_number = 0
+    str_question_number = conn.recv(1024).decode()
+    question_ID = 'question' + str(str_question_number)
+    
+    conn.send(QUESTIONS[question_ID]['question'].encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
+    conn.send(QUESTIONS[question_ID]['choice1'].encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
+    conn.send(QUESTIONS[question_ID]['choice2'].encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
+    conn.send(QUESTIONS[question_ID]['choice3'].encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
+    conn.send(QUESTIONS[question_ID]['choice4'].encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
+    conn.send(QUESTIONS[question_ID]['answer'].encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
 
-        question_numbers += 1
-
+    question_number += 1
+    conn.send("Good bye!".encode())
     conn.close()
 
 def server_program3():

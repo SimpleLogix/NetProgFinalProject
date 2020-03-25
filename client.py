@@ -14,9 +14,9 @@ for the user in the GUI.
 """
 
 import socket
+import time
 
 #GLOBAL VARIABLES
-questions_number = 0 #keep track of the question # we are on
 question = '' #The current displayed question
 answer = '' #The answer to the current question
 choice1 = '' 
@@ -38,7 +38,8 @@ def client_program():
     #sending the username to the server
     user = get_username()
     client_socket.send(user.encode())
-    
+    #time.sleep(10)
+    client_socket.recv(1024).decode() #STATUS: CONNECTED
     #--------------------------------------------
     #        THE GAME BEGINS BELOW  
     # it is the client's job to request questions
@@ -50,13 +51,11 @@ def client_program():
     #--------------------------------------------
 
     #requesting A question (index 0-9)
-
-    while questions_number <= 10 :
-       get_question_from_server()
-       # this will loop all the way to the end of the question list
-       # and send only the last one
-       # I need to find a way to wait for the client to hit submit
-       print (question) #debugging purposes ...
+    questions_number = 0 #keep track of the question # we are on
+    
+    
+    get_question_from_server(questions_number)
+           
 
 
     
@@ -84,18 +83,36 @@ def request_scores():
     return scores
 
 #receive the question/answer from server
-def get_question_from_server():
-    client_socket.send(questions_number.encode()) #send the question number
-
+def get_question_from_server(num):
+    str_question_number = str(num)
+    client_socket.send(str_question_number.encode()) #send the question number
     #receive the question and choices in pieces
+    global question 
     question = client_socket.recv(1024).decode()
+    print("question: " + question) 
+    client_socket.send('STATUS: RECEIVED 1'.encode())
+    global choice1 
     choice1 = client_socket.recv(1024).decode()
+    print("choice 1: " + choice1)
+    client_socket.send('STATUS: RECEIVED 2'.encode())
+    global choice2 
     choice2 = client_socket.recv(1024).decode()
+    print("choice 2: " + choice2)
+    client_socket.send('STATUS: RECEIVED 3'.encode())
+    global choice3 
     choice3 = client_socket.recv(1024).decode()
+    print("choice 3: " + choice3)
+    client_socket.send('STATUS: RECEIVED 4'.encode())
+    global choice4 
     choice4 = client_socket.recv(1024).decode()
+    print("choice 4: " + choice4)
+    client_socket.send('STATUS: RECEIVED 5'.encode())
+    global answer
     answer = client_socket.recv(1024).decode()
+    print("answer: " + answer)
+    client_socket.send('STATUS: RECEIVED 6'.encode())
     #update the pointer for the next question
-    questions_number += 1
+    num += 1
 
 if __name__=='__main__':
     client_program()
