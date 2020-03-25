@@ -1,4 +1,4 @@
-# Client <-> Server multiple choice battlefield v0.2
+# Client <-> Server multiple choice battlefield v0.3
 
 ### How to run the code?
 1. Run the testServer.py
@@ -47,9 +47,9 @@ cloud hosting platforms, like AWS or something similar for free.
 - [x] Send answer to the server?
 - [x] Get a question from the server?
 - [ ] Get 4 distinct answers, one of which is correct and gives points
-- [ ] function send answer
-- [ ] function req a question
-- [ ] function req choices
+- [x] function send answer to server
+- [x] function req a question from server (will be sent to GUI)
+- [x] function req choices from server (sent to GUI)
 - [ ] function req a score
 
 ## Questions
