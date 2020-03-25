@@ -5,15 +5,16 @@
 from tkinter import *
 import tkinter.messagebox as box
 import tkinter.font as tkFont
+from client import *
 
 # ----------------------------Global variables
 v = ''
-currentQuestion = ''
+current_question = ''
 a1 = ''
 a2 = ''
 a3 = ''
 a4 = ''
-questionsLeft = 10 # Show score when all questions are answered
+questions_left = 2 # Show score when all questions are answered
 score = 0
 gameStarted = False # Indicate the state of the game
 # ----------------------------Global constants
@@ -61,6 +62,7 @@ def sendToServer():
         print('Show leaderboard here')
         box.showinfo('Your score is', str(score))
         gameStartedState = False
+        # Request the server for a score
 
 
 # Need to click start game button to see the question with answers
@@ -139,7 +141,7 @@ def startGame():
     
     # Assign question and answers from the server
     currentQuestion = 'Get it from the server and assign here'
-    a1 = 'Answer from the server 1'
+    a1 = send_answer()
     a2 = 'Answer from the server 2'
     a3 = 'Answer from the server 3'
     a4 = 'Answer from the server 4'

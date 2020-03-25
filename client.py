@@ -49,8 +49,7 @@ def client_program():
     client_socket.close()
 
 def send_answer():
-    0
-
+    return 'Something'
 
 
 if __name__=='__main__':
