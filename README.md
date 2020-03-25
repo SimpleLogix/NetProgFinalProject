@@ -9,6 +9,9 @@
 - [ ] Game instruction 
 - [ ] Visual styles(Colors, images, background?)
 - [ ] Transition to leaderbord
+- [ ] Add option to add username
+- [ ] Function returns selected choice
+- [ ] Function returns the username
 
 ## What about server.py?
 - [ ] Handle multiple clients?
