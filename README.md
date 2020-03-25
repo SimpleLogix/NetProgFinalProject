@@ -29,8 +29,8 @@
 - [ ] function req a score
 
 ## Questions
-- [] Create questions
-
+- [ ] Store questions as text files
+- [ ] Store question as JSON file
 
 ***note: we should decide if we will use UDP/TCP and also display strings from client.py & server.py on the GUI
 
