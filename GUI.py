@@ -5,7 +5,6 @@
 from tkinter import *
 import tkinter.messagebox as box
 import tkinter.font as tkFont
-import tkinter as tk
 
 # ----------------------------Global variables
 v = ''
@@ -16,6 +15,7 @@ a3 = ''
 a4 = ''
 questionsLeft = 10 # Show score when all questions are answered
 score = 0
+gameStarted = False # Indicate the state of the game
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
@@ -37,9 +37,8 @@ submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
 # Send the value from the checkbox to the server
 def sendToServer():
     '''This function sends an answer to the server'''
-    global questionsLeft,score
+    global questionsLeft,score, gameStartedState
     
-   
     # Case when no answer given
     if v.get() == 0:
         box.showinfo('Oops...','Have to pick one of the provided answers')
@@ -61,6 +60,7 @@ def sendToServer():
     if questionsLeft == 0:
         print('Show leaderboard here')
         box.showinfo('Your score is', str(score))
+        gameStartedState = False
 
 
 # Need to click start game button to see the question with answers
@@ -68,7 +68,11 @@ def gameStartedState():
     '''The game is started
        All of the UI components are initialized
     '''
-    global v,currentQuestion
+    global v,currentQuestion, gameStartedState
+
+    # This will trigger an events for a game start state
+    gameStartedState = True
+
     # The question from the server will be inserted into the labe's text
     lenterNumber = Label(root,text=currentQuestion,font=questionFontSize)
     lenterNumber.pack(side=TOP)
