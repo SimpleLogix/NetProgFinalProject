@@ -15,12 +15,22 @@
 - [ ] Store questions?
 - [ ] Store answers?
 - [ ] Validate correctness of the answer provided by the clients?
-- [ ] Return a final score of the players after the last answer was given
+- [ ] Keep track of the usernames
+- [ ] Keep track of user's scores
+- [ ] Sent how many questions in total
 
 ## What about client.py?
 - [x] Send answer to the server?
 - [x] Get a question from the server?
 - [ ] Get 4 distinct answers, one of which is correct and gives points
+- [ ] function send answer
+- [ ] function req a question
+- [ ] function req choices
+- [ ] function req a score
+
+## Questions
+- [] Create questions
+
 
 ***note: we should decide if we will use UDP/TCP and also display strings from client.py & server.py on the GUI
 
