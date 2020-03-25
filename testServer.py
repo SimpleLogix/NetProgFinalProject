@@ -8,7 +8,7 @@ import _thread, time
 host = ''
 port = 7500
 
-server_socket = socket.socket()
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((host,port))
 server_socket.listen(2)
 
@@ -19,22 +19,32 @@ def handleClient(conn):
     time.sleep(10)
 
     #receiving the usernames
-    data = conn.recv(1024).decode()
-    if not data:
+    username = conn.recv(1024).decode()
+    if not username:
         conn.send("Error! Must enter username".encode())
     else:
-        welcomeMsg = "Welcome " + str(data) + ". Type 'start' to begin the game"
+        welcomeMsg = "Welcome " + str(username) + ". Hit enter to begin the game"
         conn.send(welcomeMsg.encode())
 
-    #wait for user to start the game
-    data = conn.recv(1024).decode()
-    if data.strip() == 'start':
-        conn.send("OK".encode())
-    else:
-        data = conn.recv(1024).decode()
+    #--------------------------------------
+    # THE GAME BEGINS BELOW #TODO: game auto starts after 5 sec.
+    #---------------------------------------
+    questions = ["Q1?","Q2?","Q3?"]
+    user_answers = []
+
+    for Q in questions:
+
+        conn.send(Q.encode())
+        reply = conn.recv(1024).decode()
+        user_answers.append(reply) #saving the client answer
+        print ("user " + username + " chose: " + str(reply))
+
     #conn.close()
 
 def server_program3():
+    
+    print("Server is online...")
+    
     while True:
         conn, address = server_socket.accept()
         print("Connection form: " + str(address) + ' at ' + str(now()))

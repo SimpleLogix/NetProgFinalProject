@@ -18,7 +18,9 @@
 - [ ] Return a final score of the players after the last answer was given
 
 ## What about client.py?
-- [ ] Send answer to the server?
-- [ ] Get a question from the server?
+- [x] Send answer to the server?
+- [x] Get a question from the server?
 - [ ] Get 4 distinct answers, one of which is correct and gives points
+
+***note: we should decide if we will use UDP/TCP and also display strings from client.py & server.py on the GUI
 
