@@ -140,7 +140,7 @@ def startGame():
     global current_question,a1,a2,a3,a4
     
     # Assign question and answers from the server
-    currentQuestion = 'Get it from the server and assign here'
+    current_question = 'Get it from the server and assign here'
     a1 = send_answer()
     a2 = 'Answer from the server 2'
     a3 = 'Answer from the server 3'
