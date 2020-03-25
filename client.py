@@ -3,8 +3,11 @@
 Created on Mon Mar  23 16:30:31 2020
 
 -------------------------------------------------------------
-Some parts of the code are copied from the clientProgram code 
-from class will be manipulating to our application standards
+The client program which establishes connection to the game server 
+and allows users to join a multiplayer room to compete against
+each other. The client acts as the middleman between the GUI and 
+the server, requesting data from the server and displaying it
+for the user in the GUI.
 -------------------------------------------------------------
 
 @author: harkousw
@@ -12,46 +15,87 @@ from class will be manipulating to our application standards
 
 import socket
 
+#GLOBAL VARIABLES
+questions_number = 0 #keep track of the question # we are on
+question = '' #The current displayed question
+answer = '' #The answer to the current question
+choice1 = '' 
+choice2 = ''
+choice3 = ''
+choice4 = ''
+scores = [] #The scores of all the players
+
 # setting the IP and ports
-clientIP = socket.gethostname()
+client_IP = socket.gethostname()
 port = 7500
 
 #Open a socket and connect the client to the server
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((clientIP, port))
+client_socket.connect((client_IP, port))
 
 def client_program():
    
- 
-    #sending the username
-    user = input('Enter username: ')
+    #sending the username to the server
+    user = get_username()
     client_socket.send(user.encode())
-
-    #now we wait for the client to start the game (by hitting 'Enter')
-    data = client_socket.recv(1024).decode()
-    print('From server: ' + data )
     
-    message = input(' -> ')                     
-    client_socket.send(message.encode())
+    #--------------------------------------------
+    #        THE GAME BEGINS BELOW  
+    # it is the client's job to request questions
+    # from the server and update the local variables
+    # with such. 
+    # When the client submits their answer, another
+    # request will be made to the server for the 
+    # next question.
+    #--------------------------------------------
+
+    #requesting A question (index 0-9)
+
+    while questions_number <= 10 :
+       get_question_from_server()
+       # this will loop all the way to the end of the question list
+       # and send only the last one
+       # I need to find a way to wait for the client to hit submit
+       print (question) #debugging purposes ...
+
+
     
-    #--------------------------------------
-    # THE GAME BEGINS BELOW #TODO: game auto starts after 5 sec.
-    #---------------------------------------
-    gameStatus = 'Running'
+    #client_socket.close() #uncomment to close the connection
 
-    for _i in range(3): #testing with 3 questions for now
-        question = client_socket.recv(1024).decode()
-        print(question)
-        answer = input('choose A | B | C | D : ')
-        client_socket.send(answer.encode())
+#get the selected answer from GUI (temporary! import from GUI)
+def get_answer():
+    return 0
 
-    print ("Thank you for playing!\n" + "Goodbye!")
-    client_socket.close()
+#get username from GUI (temporary! import from GUI)
+def get_username():
+    return "user"
 
-def send_answer():
-    0
+#sends the question to the GUI
+def request_question():
+    return question
 
+#sends the choices (as a list) to the GUI
+def request_choices():
+    choices = [choice1, choice2, choice3, choice4]
+    return choices
 
+#sends the scores to the GUI
+def request_scores():
+    return scores
+
+#receive the question/answer from server
+def get_question_from_server():
+    client_socket.send(questions_number.encode()) #send the question number
+
+    #receive the question and choices in pieces
+    question = client_socket.recv(1024).decode()
+    choice1 = client_socket.recv(1024).decode()
+    choice2 = client_socket.recv(1024).decode()
+    choice3 = client_socket.recv(1024).decode()
+    choice4 = client_socket.recv(1024).decode()
+    answer = client_socket.recv(1024).decode()
+    #update the pointer for the next question
+    questions_number += 1
 
 if __name__=='__main__':
     client_program()
