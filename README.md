@@ -36,8 +36,8 @@ cloud hosting platforms, like AWS or something similar for free.
 
 ## What about server.py?
 - [ ] Handle multiple clients?
-- [ ] Store questions?
-- [ ] Store answers?
+- [x] Store questions?
+- [x] Store answers?
 - [ ] Validate correctness of the answer provided by the clients?
 - [ ] Keep track of the usernames
 - [ ] Keep track of user's scores
@@ -51,10 +51,12 @@ cloud hosting platforms, like AWS or something similar for free.
 - [x] function req a question from server (will be sent to GUI)
 - [x] function req choices from server (sent to GUI)
 - [ ] function req a score
+- [ ] fully integrated with GUI (client can communicate with server via GUI buttons)
 
 ## Questions
 - [ ] Store questions as text files
-- [ ] Store question as JSON file
+- [ ] Store questions as JSON file
+- [ ] Store questions as string variables / Dictionary
 
 ***note: we should decide if we will use UDP/TCP and also display strings from client.py & server.py on the GUI
 
