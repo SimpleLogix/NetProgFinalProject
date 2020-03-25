@@ -38,7 +38,7 @@ submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
 # Send the value from the checkbox to the server
 def sendToServer():
     '''This function sends an answer to the server'''
-    global questionsLeft,score, gameStartedState
+    global questions_left,score, gameStartedState
     
     # Case when no answer given
     if v.get() == 0:
@@ -46,9 +46,9 @@ def sendToServer():
 
     # Answer is given
     else:
-         questionsLeft -= 1
+         questions_left -= 1
          box.showinfo('Sent to the server','Your answer sent to the server')
-         print('Questions left to answer: ', questionsLeft)
+         print('Questions left to answer: ', questions_left)
          print(v.get())# Will print which number was selected
          v.set(0) # reset the selection for the next question
 
@@ -58,7 +58,7 @@ def sendToServer():
     # and include the answer(1,2,3,4) into the message
     
     # Decide when to show score
-    if questionsLeft == 0:
+    if questions_left == 0:
         print('Show leaderboard here')
         box.showinfo('Your score is', str(score))
         gameStartedState = False
@@ -70,13 +70,13 @@ def gameStartedState():
     '''The game is started
        All of the UI components are initialized
     '''
-    global v,currentQuestion, gameStartedState
+    global v,current_question, gameStartedState
 
     # This will trigger an events for a game start state
     gameStartedState = True
 
     # The question from the server will be inserted into the labe's text
-    lenterNumber = Label(root,text=currentQuestion,font=questionFontSize)
+    lenterNumber = Label(root,text=current_question,font=questionFontSize)
     lenterNumber.pack(side=TOP)
  
     v = IntVar() # used to indicate which value was selected in the radiobuttons
@@ -137,7 +137,7 @@ def gameStartedState():
 
 # ----------------------------Assign questions and anwers from the server
 def startGame():
-    global currentQuestion,a1,a2,a3,a4
+    global current_question,a1,a2,a3,a4
     
     # Assign question and answers from the server
     currentQuestion = 'Get it from the server and assign here'
