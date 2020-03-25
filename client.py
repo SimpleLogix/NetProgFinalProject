@@ -55,7 +55,14 @@ def client_program():
     
     
     get_question_from_server(questions_number)
-           
+
+
+    # TODO: turn dictionary into JSON file
+    # TODO: LOOP through all of the questions
+    # TODO: Successfully communicate and integrate with the GUI
+    
+
+
 
 
     
@@ -89,28 +96,29 @@ def get_question_from_server(num):
     #receive the question and choices in pieces
     global question 
     question = client_socket.recv(1024).decode()
-    print("question: " + question) 
-    client_socket.send('STATUS: RECEIVED 1'.encode())
+    print("question: " + question) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
     global choice1 
     choice1 = client_socket.recv(1024).decode()
-    print("choice 1: " + choice1)
-    client_socket.send('STATUS: RECEIVED 2'.encode())
+    print("choice 1: " + choice1) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
     global choice2 
     choice2 = client_socket.recv(1024).decode()
-    print("choice 2: " + choice2)
-    client_socket.send('STATUS: RECEIVED 3'.encode())
+    print("choice 2: " + choice2) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
     global choice3 
     choice3 = client_socket.recv(1024).decode()
-    print("choice 3: " + choice3)
-    client_socket.send('STATUS: RECEIVED 4'.encode())
+    print("choice 3: " + choice3) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
     global choice4 
     choice4 = client_socket.recv(1024).decode()
-    print("choice 4: " + choice4)
-    client_socket.send('STATUS: RECEIVED 5'.encode())
+    print("choice 4: " + choice4) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
     global answer
     answer = client_socket.recv(1024).decode()
-    print("answer: " + answer)
-    client_socket.send('STATUS: RECEIVED 6'.encode())
+    print("answer: " + answer) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
+    
     #update the pointer for the next question
     num += 1
 
