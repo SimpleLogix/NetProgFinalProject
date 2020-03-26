@@ -5,61 +5,135 @@
 from tkinter import *
 import tkinter.messagebox as box
 import tkinter.font as tkFont
+#from gui.styles.fonts import *
 
 # ----------------------------Global variables
 username = ''
 # import in client.py module
-v = ''
-current_question = ''
-a1 = ''
-a2 = ''
-a3 = ''
-a4 = ''
+
+current_question = 'asdfsaf'
+a1 = 'asd'
+a2 = 'asd'
+a3 = 'asd'
+a4 = 'asd'
 questions_left = 2 # Show score when all questions are answered
 score = 0
-gameStarted = False # Indicate the state of the game
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
 
-# ----------------------------Create a barebone of the TKinter project
-
+# ----------------------------Main window---------------------------------------
 root = Tk()
 root.title(NAME_OF_THE_GAME)
 root.geometry(WINDOW_SIZE)
 
-# Label to hold username
-label_username = Label(root,text='Username:').grid(row=0,column=0)
-# Hold username
-uString = StringVar()
-# Entry to ask for a username
-userNameEntry = Entry(root,textvariable=uString,width=20).grid(row=0,column=1)
-
-def set_username():
-    '''Get text from the entry and send it to the server'''
-    global username
-    username = uString.get()
-    print(username)
-    
-# Button to set uername
-button_get_username = Button(root, text="Submit",
-                          bg='white',
-                          padx=20,
-                          width=20,
-                          height=3,
-                          bd=0,
-                          command=set_username).grid(row=0,column=2)
-
-
+# ----- Store an integer as a picked choice identifier
+v = IntVar()
 #------------------------------Styles
 # Font styles
 questionFontSize = tkFont.Font(family="Lucida Grande", size=18)
 submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
 
+
+# ---------------------------Username frame-------------------------------------
+usernameFrame = Frame(root)
+label_username = Label(usernameFrame,text='Username:').grid(row=0,column=1)
+# Hold username
+uString = StringVar()
+# Entry to ask for a username
+userNameEntry = Entry(usernameFrame,textvariable=uString,width=20).grid(row=0,column=2)
+
+
+def remove_frame(frame):
+    '''Remove specified frame'''
+    frame.grid_forget()
+    
+def set_username():
+    '''Get text from the entry and send it to the server'''
+    global username
+    username = uString.get()
+    print(username)
+    # Remove username frame
+    remove_frame(usernameFrame)
+
+
+    
+# Button to set username
+button_get_username = Button(usernameFrame, text="Submit",
+                          bg='white',
+                          padx=5,
+                          bd=0,
+                          command=set_username).grid(row=0,column=3)
+
+usernameFrame.grid(row=0,column=1)
+# ------------------------------------------------------------------------------
+
+# -----------------------------------Leaderboard frame--------------------------
+
+leaderboard_frame = Frame(root)
+player_one_label = Label(leaderboard_frame,text='Player 1').grid(row=0, column=0)
+player_one_score = Label(leaderboard_frame,text='Score 100').grid(row=0, column=1)
+player_two_label = Label(leaderboard_frame,text='Player 2').grid(row=1, column=0)
+player_two_score = Label(leaderboard_frame,text='Score 200').grid(row=1, column=1)
+player_three_label = Label(leaderboard_frame,text='Player 3').grid(row=2, column=0)
+player_three_score = Label(leaderboard_frame,text='Score 300').grid(row=2, column=1)
+
+button_close_leaderboard = Button(leaderboard_frame, text="Submit",
+                              bg='white',
+                              padx=5,
+                              bd=0,
+                              command=remove_frame(leaderboard_frame)).grid(row=0,column=3)
+
+# ------------------------------------------------------------------------------
+
+
+# -----------------------------------Question frame-----------------------------
+question_frame = Frame(root)
+question_label = Label(question_frame,text=current_question,font=questionFontSize).grid(row=0,column=0)
+
+first = Radiobutton(question_frame,text=a1,
+                        variable=v,
+                        indicatoron=0,
+                        padx=20,
+                        pady=2,
+                        width=20,
+                        bd=0,
+                        height=4,
+                        value=1).grid(row=1,column=1)
+
+second = Radiobutton(question_frame,text=a2,
+                         variable=v,
+                         indicatoron=0,
+                         padx=20,
+                         width=20,
+                         bd=0,
+                         height=4,
+                         value=2).grid(row=2,column=1)
+
+third = Radiobutton(question_frame,text=a3,
+                        variable=v,
+                        indicatoron=0,
+                        padx=20,
+                        width=20,
+                        bd=0,
+                        height=4,
+                        value=3).grid(row=3,column=1)
+
+fourth = Radiobutton(question_frame,text=a4,
+                         variable=v,
+                         indicatoron=0,
+                         padx=20,
+                         width=20,
+                         bd=0,
+                         height=4,
+                         value=4).grid(row=4,column=1)
+
+
+# Submit button handler
 # Send the value from the checkbox to the server
 def sendToServer():
     '''This function sends an answer to the server'''
-    global questions_left,score, gameStartedState
+    global questions_left,score,v
     
     # Case when no answer given
     if v.get() == 0:
@@ -73,75 +147,16 @@ def sendToServer():
          print(v.get())# Will print which number was selected
          v.set(0) # reset the selection for the next question
 
-    # Need to know how the client will sent information to the server
-    # ...
-    # ...
-    # and include the answer(1,2,3,4) into the message
-    
     # Decide when to show score
     if questions_left == 0:
+        remove_frame(question_frame)
         print('Show leaderboard here')
+        leaderboard_frame.grid(row=0,column=1)
         box.showinfo('Your score is', str(score))
-        gameStartedState = False
-        # Request the server for a score
-
-
-# Need to click start game button to see the question with answers
-def gameStartedState():
-    '''The game is started
-       All of the UI components are initialized
-    '''
-    global v,current_question, gameStartedState
-
-    # This will trigger an events for a game start state
-    gameStartedState = True
-
-    # The question from the server will be inserted into the labe's text
-    lenterNumber = Label(root,text=current_question,font=questionFontSize).grid(row=1,column=2)
- 
-    v = IntVar() # used to indicate which value was selected in the radiobuttons
-
-    first = Radiobutton(root,text=a1,
-                        variable=v,
-                        indicatoron=0,
-                        padx=20,
-                        pady=2,
-                        width=20,
-                        bd=0,
-                        height=4,
-                        value=1).grid(row=2,column=1)
-
-    second = Radiobutton(root,text=a2,
-                         variable=v,
-                         indicatoron=0,
-                         padx=20,
-                         width=20,
-                         bd=0,
-                         height=4,
-                         value=2).grid(row=3,column=1)
-
-    third = Radiobutton(root,text=a3,
-                        variable=v,
-                        indicatoron=0,
-                        padx=20,
-                        width=20,
-                        bd=0,
-                        height=4,
-                        value=3).grid(row=4,column=1)
-
-    fourth = Radiobutton(root,text=a4,
-                         variable=v,
-                         indicatoron=0,
-                         padx=20,
-                         width=20,
-                         bd=0,
-                         height=4,
-                         value=4).grid(row=5,column=1)
-
-
-    #-----------------------------Submit button
-    #Should send the answer back to the server
-    submitButton = Button(root, text="Submit",
+        questions_left = 2
+    
+#-----------------------------Submit button
+submitButton = Button(question_frame, text="Submit",
                           bg='white',
                           padx=20,
                           width=20,
@@ -149,19 +164,14 @@ def gameStartedState():
                           bd=0,
                           command=sendToServer).grid(row=6,column=2)
 
-# ----------------------------Assign questions and anwers from the server
+
+# ------------------------------------------------------------------------------
+
+
+# ----------------------------Assign questions and anwers from the server ----
 def startGame():
-    global current_question,a1,a2,a3,a4
-    
-    # Assign question and answers from the server
-    current_question = 'Get it from the server and assign here'
-    a1 = 'Another answer'
-    a2 = 'Answer from the server 2'
-    a3 = 'Answer from the server 3'
-    a4 = 'Answer from the server 4'
-    
-    # Initialize UI components
-    gameStartedState()
+    # Show questions
+    question_frame.grid(row=0,column=1)
     '''Start the game. This command will request a question from the server'''
     box.showinfo('New game','The game is about to start')  
 
