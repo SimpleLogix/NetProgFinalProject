@@ -7,17 +7,18 @@ import tkinter.messagebox as box
 import tkinter.font as tkFont
 #from gui.styles.fonts import *
 
-# ----------------------------Global variables
+# ----------------------------Global variables used by client.py
 username = ''
-# import in client.py module
-
 current_question = 'asdfsaf'
 a1 = 'asd'
 a2 = 'asd'
 a3 = 'asd'
 a4 = 'asd'
 questions_left = 2 # Show score when all questions are answered
-score = 0
+scores = {'player1':0,'player2':0,'player3':0}
+# 
+individual_score = 0
+userDone = False
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
@@ -47,6 +48,7 @@ userNameEntry = Entry(usernameFrame,textvariable=uString,width=20).grid(row=0,co
 def remove_frame(frame):
     '''Remove specified frame'''
     frame.grid_forget()
+    #frame.destroy()
     
 def set_username():
     '''Get text from the entry and send it to the server'''
@@ -72,17 +74,19 @@ usernameFrame.grid(row=0,column=1)
 
 leaderboard_frame = Frame(root)
 player_one_label = Label(leaderboard_frame,text='Player 1').grid(row=0, column=0)
-player_one_score = Label(leaderboard_frame,text='Score 100').grid(row=0, column=1)
+player_one_score = Label(leaderboard_frame,text=scores['player1']).grid(row=0, column=1)
 player_two_label = Label(leaderboard_frame,text='Player 2').grid(row=1, column=0)
-player_two_score = Label(leaderboard_frame,text='Score 200').grid(row=1, column=1)
+player_two_score = Label(leaderboard_frame,text=scores['player2']).grid(row=1, column=1)
 player_three_label = Label(leaderboard_frame,text='Player 3').grid(row=2, column=0)
-player_three_score = Label(leaderboard_frame,text='Score 300').grid(row=2, column=1)
+player_three_score = Label(leaderboard_frame,text=scores['player3']).grid(row=2, column=1)
 
-button_close_leaderboard = Button(leaderboard_frame, text="Submit",
+remove_leaderboard = remove_frame(leaderboard_frame)
+
+button_close_leaderboard = Button(leaderboard_frame, text="close",
                               bg='white',
                               padx=5,
                               bd=0,
-                              command=remove_frame(leaderboard_frame)).grid(row=0,column=3)
+                              command=leaderboard_frame.grid_forget()).grid(row=3,column=0)
 
 # ------------------------------------------------------------------------------
 
@@ -133,7 +137,7 @@ fourth = Radiobutton(question_frame,text=a4,
 # Send the value from the checkbox to the server
 def sendToServer():
     '''This function sends an answer to the server'''
-    global questions_left,score,v
+    global questions_left,individual_score,v
     
     # Case when no answer given
     if v.get() == 0:
@@ -152,7 +156,8 @@ def sendToServer():
         remove_frame(question_frame)
         print('Show leaderboard here')
         leaderboard_frame.grid(row=0,column=1)
-        box.showinfo('Your score is', str(score))
+        box.showinfo('Your score!', str(individual_score))
+        # reset questions left for the next game
         questions_left = 2
     
 #-----------------------------Submit button
