@@ -4,16 +4,6 @@
 1. Run the testServer.py
 2. Run GUI.py
 
-Now we have a little bit more complicated program structure.
-GUI.py importing client.py module
-When we run GUI.py the client.py code is able to establish 
-a connection to the server
-
-I figured that this observation is helpful. Meaning that we already have
-our client.py and GUI.py integrated together.
-
-The testServer.py will be running separately.
-
 ### About circular dependencies
 We now have sort of an app architecture which is similar to MVC.Which is widely used for a mobile app development.
 As before we wanted to import some function from client.py to the GUI.py to use them there. It is totally wrong and not necessary. Partially importing something from module A to module B, and something else from B to A is a circular dependecy. The python interpreter will know that and won't allow the program to be running. Instead we can import anything textual from GUI.py to client.py, including global variables. The module client.py will set values from the server(scores,usernames,questions,answers) into variables imported from GUI.py. The GUI.py job is primarily showing the interface and changing frames from start game state to leaderboard, showing scores and so forth. Since this small observation is based on the current code, later on it can be adjusted.
