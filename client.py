@@ -16,17 +16,21 @@ for the user in the GUI.
 import socket
 import time
 # imports from GUI
-from GUI import v,username
+from GUI import v,username, current_question, a1, a2, a3, a4
 
-# Those can be imported from gui as well
-#GLOBAL VARIABLES
-question = '' #The current displayed question
-answer = '' #The answer to the current question
-choice1 = '' 
+
+#GLOBAL VARIABLES (USED ONLY WITHIN client.py)
+question_number = 0 #The question number (index 0-9)
+question = ''
+choice1 = ''
 choice2 = ''
 choice3 = ''
 choice4 = ''
-scores = [] #The scores of all the players
+scores = {
+    "player 1" : 0,
+    "player 2" : 0,
+    "player 3" : 0
+} #The scores of ALL the players
 
 # setting the IP and ports
 client_IP = socket.gethostname()
@@ -37,7 +41,9 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((client_IP, port))
 
 def client_program():
-   
+    """ Client program to connect to server and 
+        open communication between user and game server
+    """
     #sending the username to the server
     user = get_username()
     client_socket.send(user.encode())
@@ -46,29 +52,21 @@ def client_program():
     #--------------------------------------------
     #        THE GAME BEGINS BELOW  
     # it is the client's job to request questions
-    # from the server and update the local variables
-    # with such. 
+    # from the server and update GUI's variables.
     # When the client submits their answer, another
     # request will be made to the server for the 
     # next question.
     #--------------------------------------------
 
-    #requesting A question (index 0-9)
-    questions_number = 0 #keep track of the question # we are on
-    
-    
-    get_question_from_server(questions_number)
+    # ask for first question
+    get_question_from_server(0)
+
+  
 
 
     # TODO: turn dictionary into JSON file
     # TODO: LOOP through all of the questions
-    # TODO: Successfully communicate and integrate with the GUI
-    
-
-
-
-
-    
+ 
     #client_socket.close() #uncomment to close the connection
 
 #[X] Answer is imported from GUI's radiobutton
@@ -83,51 +81,37 @@ def get_username():
     '''get username from userNameEntry'''
     return username
 
-#sends the question to the GUI
-def request_question():
-    return question
 
-#sends the choices (as a list) to the GUI
-def request_choices():
-    choices = [choice1, choice2, choice3, choice4]
-    return choices
-
-#sends the scores to the GUI
-def request_scores():
-    return scores
-
-#receive the question/answer from server
+#receive the question/answer from server and update GUI variables
 def get_question_from_server(num):
-    str_question_number = str(num)
-    client_socket.send(str_question_number.encode()) #send the question number
+    """ Make a server request with the specified
+        question number, num, and sets the client's global
+        variables with the correct question content
+    """
+    global current_question, a1, a2, a3, a4
+
     #receive the question and choices in pieces
-    global question 
-    question = client_socket.recv(1024).decode()
-    print("question: " + question) # FOR Debugging Purposes ...
+    client_socket.send(str(num).encode()) #send the question number
+    current_question = client_socket.recv(1024).decode()
+    print("question: " + current_question) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
-    global choice1 
-    choice1 = client_socket.recv(1024).decode()
-    print("choice 1: " + choice1) # FOR Debugging Purposes ...
+
+    a1 = client_socket.recv(1024).decode()
+    print("choice 1: " + a1) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
-    global choice2 
-    choice2 = client_socket.recv(1024).decode()
-    print("choice 2: " + choice2) # FOR Debugging Purposes ...
+
+    a2 = client_socket.recv(1024).decode()
+    print("choice 2: " + a2) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
-    global choice3 
-    choice3 = client_socket.recv(1024).decode()
-    print("choice 3: " + choice3) # FOR Debugging Purposes ...
+
+    a3 = client_socket.recv(1024).decode()
+    print("choice 3: " + a3) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
-    global choice4 
-    choice4 = client_socket.recv(1024).decode()
-    print("choice 4: " + choice4) # FOR Debugging Purposes ...
-    client_socket.send('STATUS: RECEIVED'.encode())
-    global answer
-    answer = client_socket.recv(1024).decode()
-    print("answer: " + answer) # FOR Debugging Purposes ...
+
+    a4 = client_socket.recv(1024).decode()
+    print("choice 4: " + a4) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
     
-    #update the pointer for the next question
-    num += 1
 
 if __name__=='__main__':
     client_program()
