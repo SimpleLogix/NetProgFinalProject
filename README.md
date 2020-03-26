@@ -14,6 +14,20 @@ our client.py and GUI.py integrated together.
 
 The testServer.py will be running separately.
 
+### About circular dependencies
+We now have sort of an app architecture which is similar to MVC.Which is widely used for a mobile app development.
+As before we wanted to import some function from client.py to the GUI.py to use them there. It is totally wrong and not necessary. Partially importing something from module A to module B, and something else from B to A is a circular dependecy. The python interpreter will know that and won't allow the program to be running. Instead we can import anything textual from GUI.py to client.py, including global variables. The module client.py will set values from the server(scores,usernames,questions,answers) into variables imported from GUI.py. The GUI.py job is primarily showing the interface and changing frames from start game state to leaderboard, showing scores and so forth. Since this small observation is based on the current code, later on it can be adjusted.
+
+### We eventually moved to the known app architecture!
+#### Model - server.py
+This is typically a way the database schema looks like. In our case it is where the questions and answers are stored. As well as 
+user's scores, etc. Any data that we use in the app.
+#### View - GUI.py
+This is where the user interface is designed. This part should be a slave of controller. Ideally we have all the functions which inserting values into the view, stored in the controller.
+#### Controller - client.py
+This is the part which connects Model with View. So, the controller will decide what user will see at the moment. The data from the model would be transfered to the View through the controller.
+
+
 ## What about running a server remotely?
 ### In this way we can figured how to test the server easier
 ### and be able to actually play this game.
