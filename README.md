@@ -41,9 +41,9 @@ cloud hosting platforms, like AWS or something similar for free.
 - [ ] Game instruction 
 - [ ] Visual styles(Colors, images, background?)
 - [ ] Transition to leaderbord
-- [ ] Add option to add username
-- [ ] Function returns selected choice
-- [ ] Function returns the username
+- [x] Add option to add username
+- [x] Function returns selected choice
+- [x] Function returns the username
 
 ## What about server.py?
 - [ ] Handle multiple clients?
@@ -66,8 +66,8 @@ cloud hosting platforms, like AWS or something similar for free.
 
 ## Questions
 - [ ] Store questions as text files
-- [ ] Store questions as JSON file
-- [ ] Store questions as string variables / Dictionary
+- [x] Store questions as JSON file
+- [x] Store questions as string variables / Dictionary
 
 ***note: we should decide if we will use UDP/TCP and also display strings from client.py & server.py on the GUI
 

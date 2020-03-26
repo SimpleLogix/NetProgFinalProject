@@ -3,61 +3,28 @@
 
 import socket
 import _thread, time
-
+import json
+from random import randrange
 
 #--------------------------------------------
 # BACK-END STORAGE FOR QUESTIONS AND ANSWERS
-# note: it is a dictionary now but can be put
-# into a JSON file and parsed/loaded
 #--------------------------------------------
-QUESTIONS = {
-    "question0" : {
-        "question" : "Q1",
-        "choice1" : "A1",
-        "choice2" : "A2",
-        "choice3" : "A3",
-        "choice4" : "A4",
-        "answer" : "1"
-    },
-    "question1" : {
-        "question" : "Q2",
-        "choice1" : "A1",
-        "choice2" : "A2",
-        "choice3" : "A3",
-        "choice4" : "A4",
-        "answer" : "2"
-    },
-        "question2" : {
-        "question" : "Q3",
-        "choice1" : "A1",
-        "choice2" : "A2",
-        "choice3" : "A3",
-        "choice4" : "A4",
-        "answer" : "3"
-    },
-        "question3" : {
-        "question" : "Q4",
-        "choice1" : "A1",
-        "choice2" : "A2",
-        "choice3" : "A3",
-        "choice4" : "A4",
-        "answer" : "4"
-    }
-}
-QUESTION2 = {
-    "Science" : {
-        "question0" : {
-            "question" : "wqewf???",
-            "choice1" : "A!"
-        },
-        "question1" : {
-            "question" : "???"
-        }
-    }
-    
+QUESTIONS = {}
+with open ('questions.json') as inputfile:
+    QUESTIONS = json.load(inputfile)
+    inputfile.close()
+
+connected_users = []
+
+user_scores = {
+    "player1" : 0,
+    "player2" : 0,
+    "player3" : 0
 }
 
-
+#-----------------------------------------------------------
+#                        Server Settings
+#------------------------------------------------------------
 host = ''
 port = 7500
 
@@ -75,13 +42,13 @@ def handleClient(conn): #this is what shows up for each client
         This function will run once for every client but may not all be synced
         **figure out a way to have the client wait if the other clients are still playing
     """
-    #time.sleep(10)
 
     #receiving the usernames
     username = conn.recv(1024).decode()
     if not username:
-        username = str(conn.address)
-    
+        username = str(conn.address)    
+    connected_users.append(username)
+
     print ("Welcome " + username)
     conn.send('STATUS: CONNECTED'.encode()) #send before we receive
     #--------------------------------------
@@ -91,14 +58,16 @@ def handleClient(conn): #this is what shows up for each client
     #Client sent the question number & made a request for the question contents
     str_question_number = conn.recv(1024).decode()
     question_ID = 'question' + str(str_question_number)
-    
-    send_data_to_client(conn, QUESTIONS[question_ID]['question']) #send the question to the client
-    send_data_to_client(conn, QUESTIONS[question_ID]['choice1']) #send choice1 to the client
-    send_data_to_client(conn, QUESTIONS[question_ID]['choice2']) #send choice2 to the client
-    send_data_to_client(conn, QUESTIONS[question_ID]['choice3']) #send choice3 to the client
-    send_data_to_client(conn, QUESTIONS[question_ID]['choice4']) #send choice4 to the client
+    #category_ID = 'Category' + str(randrange(5)) #pick a random category 0-4
+    category_ID = 'Category0'
+    send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['question']) #send the question to the client
+    send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice1']) #send choice1 to the client
+    send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice2']) #send choice2 to the client
+    send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice3']) #send choice3 to the client
+    send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice4']) #send choice4 to the client
 
     conn.send("Good bye!".encode())
+    connected_users.remove(username)
     conn.close()
 
 def server_program3():
