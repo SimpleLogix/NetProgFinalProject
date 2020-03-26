@@ -16,21 +16,12 @@ for the user in the GUI.
 import socket
 import time
 # imports from GUI
-from GUI import v,username, current_question, a1, a2, a3, a4
+from GUI import v,username, current_question, a1, a2, a3, a4, scores
 
 
 #GLOBAL VARIABLES (USED ONLY WITHIN client.py)
 question_number = 0 #The question number (index 0-9)
-question = ''
-choice1 = ''
-choice2 = ''
-choice3 = ''
-choice4 = ''
-scores = {
-    "player 1" : 0,
-    "player 2" : 0,
-    "player 3" : 0
-} #The scores of ALL the players
+
 
 # setting the IP and ports
 client_IP = socket.gethostname()
@@ -49,20 +40,22 @@ def client_program():
     client_socket.send(user.encode())
     #time.sleep(10)
     client_socket.recv(1024).decode() #STATUS: CONNECTED
-    #--------------------------------------------
-    #        THE GAME BEGINS BELOW  
-    # it is the client's job to request questions
-    # from the server and update GUI's variables.
-    # When the client submits their answer, another
-    # request will be made to the server for the 
-    # next question.
-    #--------------------------------------------
+    #--------------------------------------------------------
+    #                 THE GAME BEGINS BELOW  
+    #-------------------------------------------------------
 
     # ask for first question
-    get_question_from_server(0)
+    get_question_from_server(0) 
 
+    # 3/26/20 
+    #    couple of options at this point...
+    # 1) we can request 10 random questions and store them on the client side
+    #    make reference to them and update the GUI to those through a loop.
+    # ----------------------------------------------------
+    # 2) we can make a request for one question at a time, and update
+    #    the variables once when the game is initialized, and again each
+    #    time the user hits submit.
   
-
 
     # TODO: turn dictionary into JSON file
     # TODO: LOOP through all of the questions
@@ -112,6 +105,9 @@ def get_question_from_server(num):
     print("choice 4: " + a4) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
     
+#Request the leaderboard scores from server
+def get_scores_from_server():
+    pass
 
 if __name__=='__main__':
     client_program()
