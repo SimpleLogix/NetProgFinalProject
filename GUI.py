@@ -109,7 +109,7 @@ def gameStartedState():
                         width=20,
                         bd=0,
                         height=4,
-                        value=1).grid(row=2,column=2)
+                        value=1).grid(row=2,column=1)
 
     second = Radiobutton(root,text=a2,
                          variable=v,
@@ -118,7 +118,7 @@ def gameStartedState():
                          width=20,
                          bd=0,
                          height=4,
-                         value=2).grid(row=3,column=2)
+                         value=2).grid(row=3,column=1)
 
     third = Radiobutton(root,text=a3,
                         variable=v,
@@ -127,7 +127,7 @@ def gameStartedState():
                         width=20,
                         bd=0,
                         height=4,
-                        value=3).grid(row=4,column=2)
+                        value=3).grid(row=4,column=1)
 
     fourth = Radiobutton(root,text=a4,
                          variable=v,
@@ -136,7 +136,7 @@ def gameStartedState():
                          width=20,
                          bd=0,
                          height=4,
-                         value=4).grid(row=5,column=2)
+                         value=4).grid(row=5,column=1)
 
 
     #-----------------------------Submit button

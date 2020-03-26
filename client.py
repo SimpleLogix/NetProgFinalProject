@@ -71,14 +71,14 @@ def client_program():
     
     #client_socket.close() #uncomment to close the connection
 
-#get the selected answer from GUI (temporary! import from GUI)
+#[X] Answer is imported from GUI's radiobutton
 def get_answer():
     '''return an integer which represents
        which choice was selected(1,2,3,4) 
     '''
     return v.get()
 
-#get username from GUI (temporary! import from GUI)
+#[X] Username is imported from GUI's entry
 def get_username():
     '''get username from userNameEntry'''
     return username
