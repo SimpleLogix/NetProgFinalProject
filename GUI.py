@@ -9,11 +9,11 @@ import tkinter.font as tkFont
 
 # ----------------------------Global variables used by client.py
 username = ''
-current_question = 'asdfsaf'
-a1 = 'asd'
-a2 = 'asd'
-a3 = 'asd'
-a4 = 'asd'
+current_question = ''
+a1 = ''
+a2 = ''
+a3 = ''
+a4 = ''
 questions_left = 2 # Show score when all questions are answered
 scores = {'player1':0,'player2':0,'player3':0}
 # 
@@ -95,8 +95,12 @@ button_close_leaderboard = Button(leaderboard_frame, text="close",
 question_frame = Frame(root)
 question_label = Label(question_frame,text=current_question,font=questionFontSize).grid(row=0,column=0)
 
-first = Radiobutton(question_frame,text=a1,
+text = StringVar()
+text.set(a1)
+
+first = Radiobutton(question_frame,text=text,
                         variable=v,
+                        textvariable=text,
                         indicatoron=0,
                         padx=20,
                         pady=2,
@@ -104,6 +108,8 @@ first = Radiobutton(question_frame,text=a1,
                         bd=0,
                         height=4,
                         value=1).grid(row=1,column=1)
+
+
 
 second = Radiobutton(question_frame,text=a2,
                          variable=v,
