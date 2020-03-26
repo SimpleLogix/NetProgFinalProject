@@ -8,6 +8,13 @@
 We now have sort of an app architecture which is similar to MVC.Which is widely used for a mobile app development.
 As before we wanted to import some function from client.py to the GUI.py to use them there. It is totally wrong and not necessary. Partially importing something from module A to module B, and something else from B to A is a circular dependecy. The python interpreter will know that and won't allow the program to be running. Instead we can import anything textual from GUI.py to client.py, including global variables. The module client.py will set values from the server(scores,usernames,questions,answers) into variables imported from GUI.py. The GUI.py job is primarily showing the interface and changing frames from start game state to leaderboard, showing scores and so forth. Since this small observation is based on the current code, later on it can be adjusted.
 
+### Inserting question into GUI from the client.py
+1. import the following variables from the GUI.py:
+  username, current_question,a1,a2,a3,a4,questions_left,score
+2. From client.py assign any required values to the imported variables in step 1
+3. GUI.py will figure it out where to insert each value into labels
+! Exception, any values stored as a list/dictionary/ might not be interpreted by GUI in a correct way
+
 ### We eventually moved to the known app architecture!
 #### Model - server.py
 This is typically a way the database schema looks like. In our case it is where the questions and answers are stored. As well as 
