@@ -74,18 +74,13 @@ def handleClient(conn): #this is what shows up for each client
     str_question_number = conn.recv(1024).decode()
     question_ID = 'question' + str(str_question_number)
     
-    conn.send(QUESTIONS[question_ID]['question'].encode())
-    conn.recv(1024).decode() #STATUS: RECEIVED
-    conn.send(QUESTIONS[question_ID]['choice1'].encode())
-    conn.recv(1024).decode() #STATUS: RECEIVED
-    conn.send(QUESTIONS[question_ID]['choice2'].encode())
-    conn.recv(1024).decode() #STATUS: RECEIVED
-    conn.send(QUESTIONS[question_ID]['choice3'].encode())
-    conn.recv(1024).decode() #STATUS: RECEIVED
-    conn.send(QUESTIONS[question_ID]['choice4'].encode())
-    conn.recv(1024).decode() #STATUS: RECEIVED
-    conn.send(QUESTIONS[question_ID]['answer'].encode())
-    conn.recv(1024).decode() #STATUS: RECEIVED
+
+    send_data_to_client(conn, QUESTIONS[question_ID]['question'])
+    send_data_to_client(conn, QUESTIONS[question_ID]['choice1'])
+    send_data_to_client(conn, QUESTIONS[question_ID]['choice2'])
+    send_data_to_client(conn, QUESTIONS[question_ID]['choice3'])
+    send_data_to_client(conn, QUESTIONS[question_ID]['choice4'])
+    send_data_to_client(conn, QUESTIONS[question_ID]['answer'])
 
     question_number += 1
     conn.send("Good bye!".encode())
@@ -99,6 +94,10 @@ def server_program3():
         conn, address = server_socket.accept()
         print("Connection form: " + str(address) + ' at ' + str(now())) #debugging purposes ... 
         _thread.start_new(handleClient, (conn,))
+
+def send_data_to_client(conn, message):
+    conn.send(message.encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
 
 if __name__=='__main__':
     server_program3()   

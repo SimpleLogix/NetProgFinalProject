@@ -15,7 +15,10 @@ for the user in the GUI.
 
 import socket
 import time
+# imports from GUI
+from GUI import v,username
 
+# Those can be imported from gui as well
 #GLOBAL VARIABLES
 question = '' #The current displayed question
 answer = '' #The answer to the current question
@@ -68,13 +71,17 @@ def client_program():
     
     #client_socket.close() #uncomment to close the connection
 
-#get the selected answer from GUI (temporary! import from GUI)
+#[X] Answer is imported from GUI's radiobutton
 def get_answer():
-    return 0
+    '''return an integer which represents
+       which choice was selected(1,2,3,4) 
+    '''
+    return v.get()
 
-#get username from GUI (temporary! import from GUI)
+#[X] Username is imported from GUI's entry
 def get_username():
-    return "user"
+    '''get username from userNameEntry'''
+    return username
 
 #sends the question to the GUI
 def request_question():
