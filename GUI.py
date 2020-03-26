@@ -5,9 +5,10 @@
 from tkinter import *
 import tkinter.messagebox as box
 import tkinter.font as tkFont
-from client import *
 
 # ----------------------------Global variables
+username = ''
+# import in client.py module
 v = ''
 current_question = ''
 a1 = ''
@@ -26,14 +27,34 @@ WINDOW_SIZE = '500x500'
 root = Tk()
 root.title(NAME_OF_THE_GAME)
 root.geometry(WINDOW_SIZE)
-# Image placeholder
+
+# Label to hold username
+label_username = Label(root,text='Username:').grid(row=0,column=0)
+# Hold username
+uString = StringVar()
+# Entry to ask for a username
+userNameEntry = Entry(root,textvariable=uString,width=20).grid(row=0,column=1)
+
+def set_username():
+    '''Get text from the entry and send it to the server'''
+    global username
+    username = uString.get()
+    print(username)
+    
+# Button to set uername
+button_get_username = Button(root, text="Submit",
+                          bg='white',
+                          padx=20,
+                          width=20,
+                          height=3,
+                          bd=0,
+                          command=set_username).grid(row=0,column=2)
 
 
 #------------------------------Styles
 # Font styles
 questionFontSize = tkFont.Font(family="Lucida Grande", size=18)
 submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
-
 
 # Send the value from the checkbox to the server
 def sendToServer():
@@ -76,8 +97,7 @@ def gameStartedState():
     gameStartedState = True
 
     # The question from the server will be inserted into the labe's text
-    lenterNumber = Label(root,text=current_question,font=questionFontSize)
-    lenterNumber.pack(side=TOP)
+    lenterNumber = Label(root,text=current_question,font=questionFontSize).grid(row=1,column=2)
  
     v = IntVar() # used to indicate which value was selected in the radiobuttons
 
@@ -89,7 +109,7 @@ def gameStartedState():
                         width=20,
                         bd=0,
                         height=4,
-                        value=1)
+                        value=1).grid(row=2,column=1)
 
     second = Radiobutton(root,text=a2,
                          variable=v,
@@ -98,7 +118,7 @@ def gameStartedState():
                          width=20,
                          bd=0,
                          height=4,
-                         value=2)
+                         value=2).grid(row=3,column=1)
 
     third = Radiobutton(root,text=a3,
                         variable=v,
@@ -107,7 +127,7 @@ def gameStartedState():
                         width=20,
                         bd=0,
                         height=4,
-                        value=3)
+                        value=3).grid(row=4,column=1)
 
     fourth = Radiobutton(root,text=a4,
                          variable=v,
@@ -116,13 +136,8 @@ def gameStartedState():
                          width=20,
                          bd=0,
                          height=4,
-                         value=4)
+                         value=4).grid(row=5,column=1)
 
-    #Make all of them visible
-    first.pack(fill=X)
-    second.pack(fill=X)
-    third.pack(fill=X)
-    fourth.pack(fill=X)
 
     #-----------------------------Submit button
     #Should send the answer back to the server
@@ -132,8 +147,7 @@ def gameStartedState():
                           width=20,
                           height=3,
                           bd=0,
-                          command=sendToServer)
-    submitButton.pack()
+                          command=sendToServer).grid(row=6,column=2)
 
 # ----------------------------Assign questions and anwers from the server
 def startGame():
@@ -141,7 +155,7 @@ def startGame():
     
     # Assign question and answers from the server
     current_question = 'Get it from the server and assign here'
-    a1 = send_answer()
+    a1 = 'Another answer'
     a2 = 'Answer from the server 2'
     a3 = 'Answer from the server 3'
     a4 = 'Answer from the server 4'
