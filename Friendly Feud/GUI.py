@@ -20,7 +20,6 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((client_IP, port))
 # 
 individual_score = 0
-userDone = False
 questionsCount = 0
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
@@ -54,8 +53,10 @@ def get_question_from_server(num):
         variables with the correct question content
     """
     global current_question, a1,a2,a3,a4
+
     #receive the question and choices in pieces
     client_socket.send(str(num).encode()) #send the question number
+    
     current_question.set(str(client_socket.recv(1024).decode()))
     print('Question: ',current_question.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
@@ -77,7 +78,7 @@ def get_question_from_server(num):
     client_socket.send('STATUS: RECEIVED'.encode())
 
     # Don't close here
-    client_socket.close()
+    #client_socket.close()
 
 #------------------------------Styles
 # Font styles
@@ -223,7 +224,7 @@ def show_current_question():
                               width=20,
                               height=3,
                               bd=0,
-                              command=sendToServer).grid(row=6,column=2)
+                              command=sendToServer).grid(row=6,column=1)
     question_frame.grid(row=0, column=1)
     return question_frame
 
