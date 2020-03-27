@@ -3,13 +3,14 @@
 
 import socket
 import _thread, time
-import json
+import json, os
 from random import randrange
 
 #--------------------------------------------
 # BACK-END STORAGE FOR QUESTIONS AND ANSWERS
 #--------------------------------------------
-QUESTIONS = {}
+QUESTIONS = {} 
+
 with open ('questions.json') as inputfile:
     QUESTIONS = json.load(inputfile)
     inputfile.close()
