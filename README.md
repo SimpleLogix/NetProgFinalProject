@@ -1,7 +1,7 @@
-# Client <-> Server multiple choice battlefield v0.3
+# Client <-> Server multiple choice battlefield v0.4
 
 ### How to run the code?
-1. Run the testServer.py
+1. Run the server.py
 2. Run GUI.py
 
 ### About circular dependencies
@@ -31,6 +31,8 @@ This is the part which connects Model with View. So, the controller will decide 
 - [ ] Explore a possibility of running the testServer.py file on the 
 cloud hosting platforms, like AWS or something similar for free.
 
+## Next steps...
+So far we have managed to get the client to communicate with the server successfully and also been able to run and completely integrate the GUI with the client. The server
 
 ## What about GUI.py?
 - [x] Basic User Interface with tkinter widgets
@@ -44,17 +46,8 @@ cloud hosting platforms, like AWS or something similar for free.
 - [x] Add option to add username
 - [x] Function returns selected choice
 - [x] Function returns the username
-
-## What about server.py?
-- [ ] Handle multiple clients?
-- [x] Store questions?
-- [x] Store answers?
-- [ ] Validate correctness of the answer provided by the clients?
-- [ ] Keep track of the usernames
-- [ ] Keep track of user's scores
-- [ ] Sent how many questions in total
-
-## What about client.py?
+---
+    client functions:
 - [x] Send answer to the server?
 - [x] Get a question from the server?
 - [ ] Get 4 distinct answers, one of which is correct and gives points
@@ -64,10 +57,21 @@ cloud hosting platforms, like AWS or something similar for free.
 - [ ] function req a score
 - [ ] fully integrated with GUI (client can communicate with server via GUI buttons)
 
+## What about server.py?
+- [x] Handle multiple clients?
+- [x] Server-Client model using TCP
+- [x] Store questions?
+- [x] Store answers?
+- [ ] Validate correctness of the answer provided by the clients?
+- [x] Keep track of the usernames
+- [ ] Keep track of user's scores
+- [x] Sent how many questions in total
+
+
+
+
 ## Questions
 - [ ] Store questions as text files
 - [x] Store questions as JSON file
 - [x] Store questions as string variables / Dictionary
-
-***note: we should decide if we will use UDP/TCP and also display strings from client.py & server.py on the GUI
-
+- [ ] Five categories, Twenty-Five questions
