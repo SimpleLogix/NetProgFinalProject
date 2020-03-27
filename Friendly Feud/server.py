@@ -151,8 +151,7 @@ def server_program3():
         if client_number == 3: 
             client_number = 0 #reset ID
         else:
-            client_number
-             += 1
+            client_number += 1
         
         _thread.start_new(handleClient, (conn,))
 
