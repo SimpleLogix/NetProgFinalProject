@@ -69,18 +69,19 @@ def handleClient(conn): #this is what shows up for each client
 
     client_score = 0
 
-    for _i in range(10): #trying to loop 10 times for 10 questions
+    for _i in range(2): #trying to loop 10 times for 10 questions
 
         send_question(conn) #send the first question
+        #conn.send("QUESTIONS SENT".encode())
         user_answer = conn.recv(1024).decode()
-        conn.send("ANSWER RECEIVED".encode())
+        #conn.send("ANSWER RECEIVED".encode())
 
         if is_correct('Category0', 'question0', user_answer) :
             client_score += 1
         
         #TODO:
         wait_for_user = conn.recv(1024).decode() #this will cause the server to pause for the client and wait for confirmation 
-        conn.send("REQUEST RECEIVED".encode())
+        #conn.send("REQUEST RECEIVED".encode())
     
     #Updating the scoreboard
     users_and_scores[user_ID]['score'] = client_score

@@ -200,9 +200,10 @@ def show_current_question():
              print('Questions left to answer: ', questions_left)
              print(v.get())# Will print which number was selected
              v.set(0) # reset the selection for the next question
+             client_socket.send(str(v.get()).encode())
              # create a new frame with next question
-             #questionsCount += 1
-             #get_question_from_server(questionsCount)
+             questionsCount += 1
+             get_question_from_server(questionsCount)
              
              
 
