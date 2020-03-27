@@ -1,9 +1,9 @@
-# private server used for testing and debugging the client program
-# WILL NOT BE A PART OF THE FINAL PROJECT
+# server.py
+# Network Programming Final Project
 
 import socket
 import _thread, time
-import json, os
+import json
 from random import randrange
 
 #--------------------------------------------
@@ -49,15 +49,34 @@ def handleClient(conn): #this is what shows up for each client
     if not username:
         username = str(conn.address)    
     connected_users.append(username)
-
-    print ("Welcome " + username)
     conn.send('STATUS: CONNECTED'.encode()) #send before we receive
-    #--------------------------------------
-    # THE GAME BEGINS BELOW #TODO: game auto starts after 5 sec.
-    #---------------------------------------
-    
-    #Client sent the question number & made a request for the question contents
-    str_question_number = conn.recv(1024).decode()
+   
+
+    #----------------------------------------------------
+    #       THE GAME BEGINS BELOW (for client)
+    #---------------------------------------------------
+
+    client_score = 0
+
+    send_question(conn) #send the first question
+    user_answer = conn.recv(1024).decode()
+    conn.send("ANSWER RECEIVED".encode())
+
+    if is_correct('Category0', 'question0', user_answer) :
+        client_score += 1
+
+    conn.send("Good bye!".encode())
+    connected_users.remove(username)
+    conn.close()
+
+#-----------------------------------------------------------
+#                 SERVER API TOOLS
+#-----------------------------------------------------------
+
+# STARTS out receiving message, ENDS by receiving message
+def send_question(conn): #WILL NOT WORK UNLESS THE CLIENT MAKES A REQUEST FIRST
+        
+    str_question_number = conn.recv(1024).decode() #Receive the Question number
     question_ID = 'question' + str(str_question_number)
     #category_ID = 'Category' + str(randrange(5)) #pick a random category 0-4
     category_ID = 'Category0'
@@ -67,10 +86,32 @@ def handleClient(conn): #this is what shows up for each client
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice3']) #send choice3 to the client
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice4']) #send choice4 to the client
 
-    conn.send("Good bye!".encode())
-    connected_users.remove(username)
-    conn.close()
 
+#Returns TRUE if is correct, FALSE if wrong
+def is_correct(category, questions_num, user_answer):
+    
+    expected_answer = QUESTIONS[category][questions_num]['answer'] #retrieving the answer to the question
+    if user_answer == expected_answer :
+        return True
+    else :
+        return False
+
+
+def send_scoreboard():
+    pass
+
+
+def send_data_to_client(conn, message):
+    """ send the message from the server to the client
+        inputs are the server connection, and the message
+    """
+    conn.send(message.encode())
+    conn.recv(1024).decode() #STATUS: RECEIVED
+
+
+#---------------------------------------------------------------------
+#                               MAIN
+#---------------------------------------------------------------------
 def server_program3():
     """ The game server that will go online and open on port 7500,
         with multi-threading capabilities, the server is able to handle 
@@ -82,13 +123,6 @@ def server_program3():
         conn, address = server_socket.accept()
         print("Connection form: " + str(address) + ' at ' + str(now())) #debugging purposes ... 
         _thread.start_new(handleClient, (conn,))
-
-def send_data_to_client(conn, message):
-    """ send the message from the server to the client
-        inputs are the server connection, and the message
-    """
-    conn.send(message.encode())
-    conn.recv(1024).decode() #STATUS: RECEIVED
 
 if __name__=='__main__':
     server_program3()   

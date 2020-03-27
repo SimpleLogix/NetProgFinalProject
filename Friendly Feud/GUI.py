@@ -1,14 +1,26 @@
 # GUI.py
 # FINAL PROJECT FOR NETWORK CLASS
 
-# ----------------------------Necessary imports
+# ----------------------------Necessary imports tkinter
 from tkinter import *
 import tkinter.messagebox as box
 import tkinter.font as tkFont
 
+# ----------------------------Imports for communication
+import socket
+import time
+
+# setting the IP and ports
+client_IP = socket.gethostname()
+port = 7500
+
+#Open a socket and connect the client to the server
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((client_IP, port))
 # 
 individual_score = 0
 userDone = False
+questionsCount = 2
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
@@ -20,17 +32,48 @@ root.geometry(WINDOW_SIZE)
 
 # ----- Store an integer as a picked choice identifier
 v = IntVar()
-a1 = StringVar()
+a1 = ''
 # ----------------------------Global variables used by client.py
 username = ''
-current_question = StringVar()
-a2 = StringVar()
-a3 = StringVar()
-a4 = StringVar()
+current_question = ''
+a2 = ''
+a3 = ''
+a4 = ''
 questions_left = 2 # Show score when all questions are answered
 scores = {'player1':0,'player2':0,'player3':0}
+question_frame = Frame(root)
 
-print('Questions set to ',current_question.get())
+
+#receive the question/answer from server and update GUI variables
+def get_question_from_server(num):
+    """ Make a server request with the specified
+        question number, num, and sets the client's global
+        variables with the correct question content
+    """
+    global current_question, a1,a2,a3,a4
+    #receive the question and choices in pieces
+    client_socket.send(str(num).encode()) #send the question number
+    current_question = client_socket.recv(1024).decode()
+    print("question: " + current_question) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
+
+    a1 = client_socket.recv(1024).decode()
+    print("choice 1: " + a1) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
+
+    a2 = client_socket.recv(1024).decode()
+    print("choice 2: " + a2) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
+
+    a3 = client_socket.recv(1024).decode()
+    print("choice 3: " + a3) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
+
+    a4 = client_socket.recv(1024).decode()
+    print("choice 4: " + a4) # FOR Debugging Purposes ...
+    client_socket.send('STATUS: RECEIVED'.encode())
+
+    client_socket.close()
 
 #------------------------------Styles
 # Font styles
@@ -45,23 +88,18 @@ label_username = Label(usernameFrame,text='Username:').grid(row=0,column=1)
 uString = StringVar()
 # Entry to ask for a username
 userNameEntry = Entry(usernameFrame,textvariable=uString,width=20).grid(row=0,column=2)
-
-
-def remove_frame(frame):
-    '''Remove specified frame'''
-    frame.grid_forget()
-    #frame.destroy()
     
 def set_username():
     '''Get text from the entry and send it to the server'''
     global username
     username = uString.get()
+    client_socket.send(username.encode())
+    #time.sleep(10)
+    client_socket.recv(1024).decode() #STATUS: CONNECTED
     print(username)
-    # Remove username frame
-    remove_frame(usernameFrame)
+    usernameFrame.grid_forget()
+    usernameFrame.destroy()
 
-
-    
 # Button to set username
 button_get_username = Button(usernameFrame, text="Submit",
                           bg='white',
@@ -83,13 +121,11 @@ def show_leaderboard():
     player_three_label = Label(leaderboard_frame,text='Player 3').grid(row=2, column=0)
     player_three_score = Label(leaderboard_frame,text=scores['player3']).grid(row=2, column=1)
 
-    remove_leaderboard = remove_frame(leaderboard_frame)
-
     button_close_leaderboard = Button(leaderboard_frame, text="close",
                                   bg='white',
                                   padx=5,
                                   bd=0,
-                                  command=leaderboard_frame.grid_forget()).grid(row=3,column=0)
+                                  command=lambda : leaderboard_frame.grid_forget()).grid(row=3,column=0)
 
     return leaderboard_frame
 
@@ -98,9 +134,8 @@ def show_leaderboard():
 def show_current_question(current_question,a1,a2,a3,a4):
     '''Returns question frame with button handlers'''
     # -----------------------------------Question frame-----------------------------
-    question_frame = Frame(root)
-    #current_question.set('First Question')
-    question_label = Label(question_frame,text=current_question.get(),font=questionFontSize).grid(row=0,column=0)
+    global question_frame
+    question_label = Label(question_frame,text=current_question,font=questionFontSize).grid(row=0,column=0)
 
 
     first = Radiobutton(question_frame,text=a1,
@@ -147,7 +182,7 @@ def show_current_question(current_question,a1,a2,a3,a4):
     # Send the value from the checkbox to the server
     def sendToServer():
         '''This function sends an answer to the server'''
-        global questions_left,individual_score,v
+        global questions_left,individual_score,v,questionsCount
         
         # Case when no answer given
         if v.get() == 0:
@@ -160,10 +195,13 @@ def show_current_question(current_question,a1,a2,a3,a4):
              print('Questions left to answer: ', questions_left)
              print(v.get())# Will print which number was selected
              v.set(0) # reset the selection for the next question
+             # create a new frame with next question
+             
+             
 
         # Decide when to show score
         if questions_left == 0:
-            remove_frame(question_frame)
+            question_frame.destroy()
             print('Show leaderboard here')
             show_leaderboard().grid(row=0,column=1)
             box.showinfo('Your score!', str(individual_score))
@@ -178,7 +216,8 @@ def show_current_question(current_question,a1,a2,a3,a4):
                               height=3,
                               bd=0,
                               command=sendToServer).grid(row=6,column=2)
-    return question_frame.grid(row=0,column=1)
+    question_frame.grid(row=0, column=1)
+    return question_frame
 
 
 # ------------------------------------------------------------------------------
@@ -186,8 +225,10 @@ def show_current_question(current_question,a1,a2,a3,a4):
 
 # ----------------------------Assign questions and anwers from the server ----
 def startGame():
+    get_question_from_server(questionsCount)
     # Show questions
     show_current_question(current_question,a1,a2,a3,a4)
+    
     '''Start the game. This command will request a question from the server'''
     box.showinfo('New game','The game is about to start')  
 
