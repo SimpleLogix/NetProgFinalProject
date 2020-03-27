@@ -11,7 +11,7 @@ from random import randrange
 #--------------------------------------------
 QUESTIONS = {} 
 
-with open ('../data/questions.json') as inputfile:
+with open ('questions.json') as inputfile:
     QUESTIONS = json.load(inputfile)
     inputfile.close()
 
