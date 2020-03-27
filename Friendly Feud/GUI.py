@@ -20,7 +20,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((client_IP, port))
 # 
 individual_score = 0
-questionsCount = 0
+questionsCount = 1
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
@@ -45,7 +45,7 @@ questions_left = 2 # Show score when all questions are answered
 scores = {'player1':0,'player2':0,'player3':0}
 question_frame = Frame(root)
 
-
+    
 #receive the question/answer from server and update GUI variables
 def get_question_from_server(num):
     """ Make a server request with the specified
@@ -71,7 +71,7 @@ def get_question_from_server(num):
 
     a3.set(client_socket.recv(1024).decode())
     print("choice 3: ", a3.get()) # FOR Debugging Purposes ...
-    client_socket.send('STATUS: RECEIVED'.encode())
+    client_socket.send('STATUS: RECEIVED'.encode())  # Stopped here
 
     a4.set(client_socket.recv(1024).decode())
     print('choice 4:',a4.get()) # FOR Debugging Purposes ...
@@ -201,8 +201,8 @@ def show_current_question():
              print(v.get())# Will print which number was selected
              v.set(0) # reset the selection for the next question
              # create a new frame with next question
-             questionsCount += 1
-             get_question_from_server(questionsCount)
+             #questionsCount += 1
+             #get_question_from_server(questionsCount)
              
              
 
