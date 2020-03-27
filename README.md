@@ -42,10 +42,11 @@ So far we have managed to get the client to communicate with the server successf
 - [x] Show credits
 - [ ] Game instruction 
 - [ ] Visual styles(Colors, images, background?)
-- [ ] Transition to leaderbord
+- [x] Transition to leaderbord
 - [x] Add option to add username
 - [x] Function returns selected choice
 - [x] Function returns the username
+- [ ] Update question frame function
 ---
     client functions:
 - [x] Send answer to the server?
@@ -55,7 +56,7 @@ So far we have managed to get the client to communicate with the server successf
 - [x] function req a question from server (will be sent to GUI)
 - [x] function req choices from server (sent to GUI)
 - [ ] function req a score
-- [ ] fully integrated with GUI (client can communicate with server via GUI buttons)
+- [x] fully integrated with GUI (client can communicate with server via GUI buttons)
 
 ## What about server.py?
 - [x] Handle multiple clients?
@@ -71,7 +72,6 @@ So far we have managed to get the client to communicate with the server successf
 
 
 ## Questions
-- [ ] Store questions as text files
 - [x] Store questions as JSON file
 - [x] Store questions as string variables / Dictionary
 - [ ] Five categories, Twenty-Five questions

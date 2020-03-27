@@ -11,7 +11,7 @@ from random import randrange
 #--------------------------------------------
 QUESTIONS = {} 
 
-with open ('questions.json') as inputfile:
+with open ('questions.JSON') as inputfile:
     QUESTIONS = json.load(inputfile)
     inputfile.close()
 
@@ -151,7 +151,8 @@ def server_program3():
         if client_number == 3: 
             client_number = 0 #reset ID
         else:
-            client_number += 1
+            client_number
+             += 1
         
         _thread.start_new(handleClient, (conn,))
 
