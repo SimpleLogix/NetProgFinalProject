@@ -67,7 +67,8 @@ def handleClient(conn): #this is what shows up for each client
 
     conn.send("Good bye!".encode())
     connected_users.remove(username)
-    conn.close()
+    # keep the connection opened till the scores are sent back to the GUI
+    #conn.close()
 
 #-----------------------------------------------------------
 #                 SERVER API TOOLS

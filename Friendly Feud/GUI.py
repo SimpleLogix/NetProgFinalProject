@@ -73,7 +73,8 @@ def get_question_from_server(num):
     print("choice 4: " + a4) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
-    client_socket.close()
+    # Don't close here
+    #client_socket.close()
 
 #------------------------------Styles
 # Font styles
@@ -207,6 +208,8 @@ def show_current_question(current_question,a1,a2,a3,a4):
             box.showinfo('Your score!', str(individual_score))
             # reset questions left for the next game
             questions_left = 2
+            # close socket here
+            client_socket.close()
         
     #-----------------------------Submit button
     submitButton = Button(question_frame, text="Submit",
