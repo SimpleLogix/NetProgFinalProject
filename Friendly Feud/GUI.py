@@ -6,6 +6,7 @@ from tkinter import *
 import tkinter.messagebox as box
 import tkinter.font as tkFont
 
+
 # ----------------------------Imports for communication
 import socket
 import time
@@ -20,7 +21,7 @@ client_socket.connect((client_IP, port))
 # 
 individual_score = 0
 userDone = False
-questionsCount = 2
+questionsCount = 0
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
@@ -30,15 +31,17 @@ root = Tk()
 root.title(NAME_OF_THE_GAME)
 root.geometry(WINDOW_SIZE)
 
+#backgroundImage = PhotoImage(file='../doc/app.jpg')
+
 # ----- Store an integer as a picked choice identifier
 v = IntVar()
-a1 = ''
+a1 = StringVar()
 # ----------------------------Global variables used by client.py
 username = ''
-current_question = ''
-a2 = ''
-a3 = ''
-a4 = ''
+current_question = StringVar()
+a2 = StringVar()
+a3 = StringVar()
+a4 = StringVar()
 questions_left = 2 # Show score when all questions are answered
 scores = {'player1':0,'player2':0,'player3':0}
 question_frame = Frame(root)
@@ -53,28 +56,28 @@ def get_question_from_server(num):
     global current_question, a1,a2,a3,a4
     #receive the question and choices in pieces
     client_socket.send(str(num).encode()) #send the question number
-    current_question = client_socket.recv(1024).decode()
-    print("question: " + current_question) # FOR Debugging Purposes ...
+    current_question.set(str(client_socket.recv(1024).decode()))
+    print('Question: ',current_question.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
-    a1 = client_socket.recv(1024).decode()
-    print("choice 1: " + a1) # FOR Debugging Purposes ...
+    a1.set(str(client_socket.recv(1024).decode()))
+    print('choice 1: ',a1.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
-    a2 = client_socket.recv(1024).decode()
-    print("choice 2: " + a2) # FOR Debugging Purposes ...
+    a2.set(str(client_socket.recv(1024).decode()))
+    print('choice 2: ',a2.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
-    a3 = client_socket.recv(1024).decode()
-    print("choice 3: " + a3) # FOR Debugging Purposes ...
+    a3.set(client_socket.recv(1024).decode())
+    print("choice 3: ", a3.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
-    a4 = client_socket.recv(1024).decode()
-    print("choice 4: " + a4) # FOR Debugging Purposes ...
+    a4.set(client_socket.recv(1024).decode())
+    print('choice 4:',a4.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
     # Don't close here
-    #client_socket.close()
+    client_socket.close()
 
 #------------------------------Styles
 # Font styles
@@ -131,15 +134,15 @@ def show_leaderboard():
     return leaderboard_frame
 
 # ------------------------------------------------------------------------------
-
-def show_current_question(current_question,a1,a2,a3,a4):
+    
+def show_current_question():
     '''Returns question frame with button handlers'''
     # -----------------------------------Question frame-----------------------------
-    global question_frame
-    question_label = Label(question_frame,text=current_question,font=questionFontSize).grid(row=0,column=0)
+    global question_frame, current_question, a1, a2, a3, a4
+    question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).grid(row=0,column=0)
+    
 
-
-    first = Radiobutton(question_frame,text=a1,
+    first = Radiobutton(question_frame,textvariable=a1,
                             variable=v,
                             indicatoron=0,
                             padx=20,
@@ -151,7 +154,7 @@ def show_current_question(current_question,a1,a2,a3,a4):
 
 
 
-    second = Radiobutton(question_frame,text=a2,
+    second = Radiobutton(question_frame,textvariable=a2,
                              variable=v,
                              indicatoron=0,
                              padx=20,
@@ -160,7 +163,7 @@ def show_current_question(current_question,a1,a2,a3,a4):
                              height=4,
                              value=2).grid(row=2,column=1)
 
-    third = Radiobutton(question_frame,text=a3,
+    third = Radiobutton(question_frame,textvariable=a3,
                             variable=v,
                             indicatoron=0,
                             padx=20,
@@ -169,7 +172,7 @@ def show_current_question(current_question,a1,a2,a3,a4):
                             height=4,
                             value=3).grid(row=3,column=1)
 
-    fourth = Radiobutton(question_frame,text=a4,
+    fourth = Radiobutton(question_frame,textvariable=a4,
                              variable=v,
                              indicatoron=0,
                              padx=20,
@@ -197,6 +200,8 @@ def show_current_question(current_question,a1,a2,a3,a4):
              print(v.get())# Will print which number was selected
              v.set(0) # reset the selection for the next question
              # create a new frame with next question
+             questionsCount += 1
+             get_question_from_server(questionsCount)
              
              
 
@@ -230,7 +235,7 @@ def show_current_question(current_question,a1,a2,a3,a4):
 def startGame():
     get_question_from_server(questionsCount)
     # Show questions
-    show_current_question(current_question,a1,a2,a3,a4)
+    show_current_question()
     
     '''Start the game. This command will request a question from the server'''
     box.showinfo('New game','The game is about to start')  
