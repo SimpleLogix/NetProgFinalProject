@@ -16,6 +16,7 @@ for the user in the GUI.
 import socket
 import time
 # imports from GUI
+<<<<<<< HEAD:Friendly Feud/client.py
 <<<<<<< HEAD:client.py
 from GUI import v,username, current_question, a1, a2, a3, a4, show_current_question
 =======
