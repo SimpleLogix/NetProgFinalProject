@@ -88,6 +88,7 @@ def handleClient(conn): #this is what shows up for each client
     #AT THIS POINT THE GAME IS OVER AND USER SHOULD WAIT FOR ALL CONNECTIONS TO END
     gameIsDone = True
 
+    send_scoreboard(conn)
 
     conn.send("Good bye!".encode())
     conn.close()
@@ -119,9 +120,10 @@ def is_correct(category, questions_num, user_answer):
     else :
         return False
 
-#send a dictionary with the usernames and scores to the client to display at the end of the game
-def send_scoreboard():
-    pass #TODO: can we send dictionaries or files from server to client?
+#dumps scores/users in json and sends it to client
+def send_scoreboard(conn):
+    data = json.dumps(users_and_scores)
+    conn.send(data)
 
 
 def send_data_to_client(conn, message):
