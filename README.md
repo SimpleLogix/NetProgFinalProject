@@ -8,6 +8,16 @@
 We now have sort of an app architecture which is similar to MVC.Which is widely used for a mobile app development.
 As before we wanted to import some function from client.py to the GUI.py to use them there. It is totally wrong and not necessary. Partially importing something from module A to module B, and something else from B to A is a circular dependecy. The python interpreter will know that and won't allow the program to be running. Instead we can import anything textual from GUI.py to client.py, including global variables. The module client.py will set values from the server(scores,usernames,questions,answers) into variables imported from GUI.py. The GUI.py job is primarily showing the interface and changing frames from start game state to leaderboard, showing scores and so forth. Since this small observation is based on the current code, later on it can be adjusted.
 
+### Add images into GUI
+The PhotoImage class can read GIF and PGM/PPM images from files:
+photo = PhotoImage(file="image.gif")
+photo = PhotoImage(file="lenna.pgm")
+
+You can use a PhotoImage instance everywhere Tkinter accepts an image object. An example:
+label = Label(image=photo)
+label.image = photo # keep a reference!
+label.pack()  or label.grid(row=0, column=0)
+
 ### Inserting question into GUI from the client.py
 1. import the following variables from the GUI.py:
   username, current_question,a1,a2,a3,a4,questions_left,score
