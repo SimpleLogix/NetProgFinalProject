@@ -19,6 +19,8 @@ import time
 <<<<<<< HEAD:client.py
 from GUI import v,username, current_question, a1, a2, a3, a4, show_current_question
 =======
+=======
+>>>>>>> a292b96a9f13c28174f8919900cafd73bcf6269c:client.py
 from GUI import v,username, current_question, a1, a2, a3, a4, scores
 
 >>>>>>> a292b96a9f13c28174f8919900cafd73bcf6269c:Friendly Feud/client.py
