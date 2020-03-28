@@ -1,5 +1,23 @@
 # Client <-> Server multiple choice battlefield v0.4
 
+### What to do with multithreading?
+After some internet research, it appeared that we need to figured how the server will execute threads for each client.
+The picture is as the following.
+
+Client 1 --> q1 <-- Server thread for client 1 [q2,q3,q4,q5,q6,q7,q8,q9,q10] 
+Question one sent, waiting for answer --> answer received --> execute thread (will sent next question and pause further execution)
+
+Client 2 --> q2 <-- Server thread for client 2 [q3,q4,q5,q6,q7,q8,q9,q10] 
+
+Client 3 --> q5 <-- Server thread for client 3 [q6,q7,q8,q9,q10] 
+
+Each server thread should have a listener, which will trigger the execution of the next peace of code (assign next question for a client)
+
+Since the way we do it now, seems like each client will receive the same question, and it assumes that all of the clients will answer questions simultaneously, which is not really happens.If we want the server to interact only with one client, then we can try to have a single user game. Otherwise, we have to come up with something that can manage multiple users independently.
+
+### What about branches?
+I've created a branch Alexperiments, where I am gonna do some wild implementations/variations of the master branch, without touching master branch.
+
 ### How to run the code?
 1. Run the server.py
 2. Run GUI.py
