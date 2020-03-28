@@ -20,7 +20,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((client_IP, port))
 # 
 individual_score = 0
-questionsCount = 1
+questionsCount = 0
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
@@ -199,10 +199,11 @@ def show_current_question():
              box.showinfo('Sent to the server','Your answer sent to the server')
              print('Questions left to answer: ', questions_left)
              print(v.get())# Will print which number was selected
+             client_socket.send(str(v.get()).encode())
              v.set(0) # reset the selection for the next question
              # create a new frame with next question
-             #questionsCount += 1
-             #get_question_from_server(questionsCount)
+             questionsCount -= 1
+             get_question_from_server(questionsCount)
              
              
 

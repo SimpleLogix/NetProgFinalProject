@@ -73,14 +73,18 @@ def handleClient(conn): #this is what shows up for each client
 
         send_question(conn) #send the first question
         user_answer = conn.recv(1024).decode()
-        conn.send("ANSWER RECEIVED".encode())
+
+        #THis will insert the string into the quesiton field
+        conn.send(''.encode())
 
         if is_correct('Category0', 'question0', user_answer) :
             client_score += 1
         
         #TODO:
         wait_for_user = conn.recv(1024).decode() #this will cause the server to pause for the client and wait for confirmation 
-        conn.send("REQUEST RECEIVED".encode())
+
+        #this inserts the REQUEST RECEIVED instead of first question
+        conn.send(''.encode())
     
     #Updating the scoreboard
     users_and_scores[user_ID]['score'] = client_score
@@ -99,8 +103,9 @@ def handleClient(conn): #this is what shows up for each client
 
 # STARTS out receiving message, ENDS by receiving message
 def send_question(conn): #WILL NOT WORK UNLESS THE CLIENT MAKES A REQUEST FIRST
-        
-    str_question_number = conn.recv(1024).decode() #Receive the Question number
+    # Error was here
+    str_question_number = conn.recv(1024).decode()
+    
     question_ID = 'question' + str(str_question_number)
     #category_ID = 'Category' + str(randrange(5)) #pick a random category 0-4
     category_ID = 'Category0' #TODO: update all categories with name?
