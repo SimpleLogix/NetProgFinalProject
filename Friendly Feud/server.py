@@ -39,9 +39,9 @@ port = 7500
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((host,port))
+#Listen for sockets to begin accepting
 server_socket.listen(2)
 
-gameIsDone = False
 
 def now():
     """ Returns the current time in string
@@ -60,7 +60,7 @@ def handleClient(conn): #this is what shows up for each client
     if not username:
         username = str(conn.address)    
     users_and_scores[user_ID]['username'] = username
-    conn.send('STATUS: CONNECTED'.encode()) #send before we receive
+    print(username + " connected to server.")
    
 
     #----------------------------------------------------
@@ -69,62 +69,54 @@ def handleClient(conn): #this is what shows up for each client
 
     client_score = 0
 
-    for _i in range(2): #trying to loop 10 times for 10 questions
+    for _i in range(5): #LOOP begins when the clien hits start game
 
-        send_question(conn) #send the first question
-        #conn.send("QUESTIONS SENT".encode())
-        user_answer = conn.recv(1024).decode()
-        #conn.send("ANSWER RECEIVED".encode())
-
-        if is_correct('Category0', 'question0', user_answer) :
-            client_score += 1
+        answer_key = send_question(conn) #send the first question
+        conn.send("QUESTIONS SENT".encode())
         
-        #TODO:
-        wait_for_user = conn.recv(1024).decode() #this will cause the server to pause for the client and wait for confirmation 
-        #conn.send("REQUEST RECEIVED".encode())
+        user_answer = conn.recv(1024).decode() #receive the answer
+        conn.send("ANSWER RECEIVED".encode())
+
+        if user_answer == answer_key: #check the answer
+            client_score += 1
     
+    print(username + ' finished the game.')
+    print('score : ' + str(client_score))
+
     #Updating the scoreboard
     users_and_scores[user_ID]['score'] = client_score
 
-    #AT THIS POINT THE GAME IS OVER AND USER SHOULD WAIT FOR ALL CONNECTIONS TO END
-    gameIsDone = True
+    #SEND THE SCORE (may need to also send the userID to distinguish clients
+    conn.send(str(client_score).encode())
 
-    send_scoreboard(conn)
+    #send the scoreboard in str (json/dict format) ... client needs get_scoreboard()
+    #send_scoreboard(conn)
 
-    conn.send("Good bye!".encode())
     conn.close()
 
 #-----------------------------------------------------------
 #                 SERVER API TOOLS
 #-----------------------------------------------------------
 
-# STARTS out receiving message, ENDS by receiving message
-def send_question(conn): #WILL NOT WORK UNLESS THE CLIENT MAKES A REQUEST FIRST
+# Send question to client and return the answer
+def send_question(conn):
         
-    str_question_number = conn.recv(1024).decode() #Receive the Question number
-    question_ID = 'question' + str(str_question_number)
-    #category_ID = 'Category' + str(randrange(5)) #pick a random category 0-4
-    category_ID = 'Category0' #TODO: update all categories with name?
+    question_ID = 'question' + str(randrange(5)) #pick a random question 0-4
+    category_ID = 'Category' + str(randrange(2)) 
+    
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['question']) #send the question to the client
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice1']) #send choice1 to the client
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice2']) #send choice2 to the client
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice3']) #send choice3 to the client
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice4']) #send choice4 to the client
-
-
-#Returns TRUE if is correct, FALSE if wrong
-def is_correct(category, questions_num, user_answer):
     
-    expected_answer = QUESTIONS[category][questions_num]['answer'] #retrieving the answer to the question
-    if user_answer == expected_answer :
-        return True
-    else :
-        return False
+    return QUESTIONS[category_ID][question_ID]['answer']
 
-#dumps scores/users in json and sends it to client
+
+#dumps scores/users in str and sends it to client
 def send_scoreboard(conn):
     data = json.dumps(users_and_scores)
-    conn.send(data)
+    conn.send(data.encode())
 
 
 def send_data_to_client(conn, message):
@@ -156,6 +148,7 @@ def server_program3():
         else:
             client_number += 1
         
+        #Starts a new thread for each client
         _thread.start_new(handleClient, (conn,))
 
 if __name__=='__main__':

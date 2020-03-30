@@ -20,11 +20,10 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((client_IP, port))
 # 
 individual_score = 0
-questionsCount = 1
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
-
+NUMBER_OF_QUESTIONS = 5
 # ----------------------------Main window---------------------------------------
 root = Tk()
 root.title(NAME_OF_THE_GAME)
@@ -41,13 +40,13 @@ current_question = StringVar()
 a2 = StringVar()
 a3 = StringVar()
 a4 = StringVar()
-questions_left = 2 # Show score when all questions are answered
+questions_left = NUMBER_OF_QUESTIONS # Show score when all questions are answered
 scores = {'player1':0,'player2':0,'player3':0}
 question_frame = Frame(root)
 
     
 #receive the question/answer from server and update GUI variables
-def get_question_from_server(num):
+def get_question_from_server():
     """ Make a server request with the specified
         question number, num, and sets the client's global
         variables with the correct question content
@@ -55,8 +54,7 @@ def get_question_from_server(num):
     global current_question, a1,a2,a3,a4
 
     #receive the question and choices in pieces
-    client_socket.send(str(num).encode()) #send the question number
-    
+
     current_question.set(str(client_socket.recv(1024).decode()))
     print('Question: ',current_question.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
@@ -69,16 +67,14 @@ def get_question_from_server(num):
     print('choice 2: ',a2.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
-    a3.set(client_socket.recv(1024).decode())
+    a3.set(str(client_socket.recv(1024).decode()))
     print("choice 3: ", a3.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())  # Stopped here
 
-    a4.set(client_socket.recv(1024).decode())
+    a4.set(str(client_socket.recv(1024).decode()))
     print('choice 4:',a4.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
-    # Don't close here
-    #client_socket.close()
 
 #------------------------------Styles
 # Font styles
@@ -100,8 +96,6 @@ def set_username():
     username = uString.get()
     client_socket.send(username.encode())
     #time.sleep(10)
-    client_socket.recv(1024).decode() #STATUS: CONNECTED
-    print(username)
     usernameFrame.grid_forget()
     usernameFrame.destroy()
 
@@ -187,36 +181,49 @@ def show_current_question():
     # Send the value from the checkbox to the server
     def sendToServer():
         '''This function sends an answer to the server'''
-        global questions_left,individual_score,v,questionsCount
+        global questions_left,individual_score,v
         
         # Case when no answer given
         if v.get() == 0:
             box.showinfo('Oops...','Have to pick one of the provided answers')
 
-        # Answer is given
-        else:
-             questions_left -= 1
-             box.showinfo('Sent to the server','Your answer sent to the server')
-             print('Questions left to answer: ', questions_left)
-             print(v.get())# Will print which number was selected
-             v.set(0) # reset the selection for the next question
-             client_socket.send(str(v.get()).encode())
-             # create a new frame with next question
-             questionsCount += 1
-             get_question_from_server(questionsCount)
-             
-             
-
+        questions_left -= 1
         # Decide when to show score
         if questions_left == 0:
             question_frame.destroy()
             print('Show leaderboard here')
             show_leaderboard().grid(row=0,column=1)
+
+            #sending to server
+            client_socket.recv(1024).decode() 
+            client_socket.send(str(v.get()).encode()) #send the answer to server
+            client_socket.recv(1024).decode() 
+            client_socket.send('REQUESTING CLIENT SCORE'.encode())
+            individual_score = client_socket.recv(1024).decode() #THIS IS WHERE THE END OF COMMUNICATION IS
+
             box.showinfo('Your score!', str(individual_score))
             # reset questions left for the next game
-            questions_left = 2
-            # close socket here
-            client_socket.close()
+            questions_left = NUMBER_OF_QUESTIONS
+            
+        # Answer is given
+        else:
+            box.showinfo('Sent to the server','Your answer sent to the server')
+            print('Questions left to answer: ', questions_left)
+            print(v.get())# Will print which number was selected
+            client_socket.recv(1024).decode() 
+            client_socket.send(str(v.get()).encode()) #send the answer to server
+            client_socket.recv(1024).decode() 
+            
+            # This would be where we can add the ability to update score in real time
+            # AKA let client know if they got the question right/wrong
+
+            # create a new frame with next question
+            v.set(0) # reset the selection for the next question
+            get_question_from_server()
+            show_current_question() #This is what we were missing, we needed to update the display
+                                   
+
+
         
     #-----------------------------Submit button
     submitButton = Button(question_frame, text="Submit",
@@ -235,7 +242,7 @@ def show_current_question():
 
 # ----------------------------Assign questions and anwers from the server ----
 def startGame():
-    get_question_from_server(questionsCount)
+    get_question_from_server()
     # Show questions
     show_current_question()
     
