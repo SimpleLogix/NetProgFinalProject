@@ -15,6 +15,8 @@ Each server thread should have a listener, which will trigger the execution of t
 
 Since the way we do it now, seems like each client will receive the same question, and it assumes that all of the clients will answer questions simultaneously, which is not really happens.If we want the server to interact only with one client, then we can try to have a single user game. Otherwise, we have to come up with something that can manage multiple users independently.
 
+walid: I believe the model we are using does use multithreading. A new thread is started and the handleClient function is called for each client that connects. After updating the code and getting the questions to display properly, I tested this theory by running the server the connecting with multiple clients. Since we have now switched to just sending the client random questions instead of requesting with a number (which we were going to have to use an rng for anyway..), I was able to see different questions on different clients. I want to explore danny's idea to how kahoot.it does it. Perhaps we can create pseudo 'game rooms' where users will be put into as they join (a gameroom for the first 3 users, when the 4th joins, create a new game room for him and the next two, etc...) We can simply store these gameroom information into a list on the server to keep track of the current running games (not that we expect more than one concurrent running game)
+
 ### What about branches?
 I've created a branch Alexperiments, where I am gonna do some wild implementations/variations of the master branch, without touching master branch.
 
@@ -59,9 +61,6 @@ This is the part which connects Model with View. So, the controller will decide 
 - [ ] Explore a possibility of running the testServer.py file on the 
 cloud hosting platforms, like AWS or something similar for free.
 
-## Next steps...
-So far we have managed to get the client to communicate with the server successfully and also been able to run and completely integrate the GUI with the client. The server
-
 ## What about GUI.py?
 - [x] Basic User Interface with tkinter widgets
 - [x] Show player's score
@@ -74,16 +73,17 @@ So far we have managed to get the client to communicate with the server successf
 - [x] Add option to add username
 - [x] Function returns selected choice
 - [x] Function returns the username
-- [ ] Update question frame function
+- [x] Update question frame function
 ---
     client functions:
 - [x] Send answer to the server?
 - [x] Get a question from the server?
-- [ ] Get 4 distinct answers, one of which is correct and gives points
+- [x] Get 4 distinct answers, one of which is correct and gives points
 - [x] function send answer to server
 - [x] function req a question from server (will be sent to GUI)
 - [x] function req choices from server (sent to GUI)
-- [ ] function req a score
+- [x] function req a score
+- [ ] function req the scoreboard 
 - [x] fully integrated with GUI (client can communicate with server via GUI buttons)
 
 ## What about server.py?
@@ -91,12 +91,13 @@ So far we have managed to get the client to communicate with the server successf
 - [x] Server-Client model using TCP
 - [x] Store questions?
 - [x] Store answers?
-- [ ] Validate correctness of the answer provided by the clients?
+- [x] Validate correctness of the answer provided by the clients?
 - [x] Keep track of the usernames
-- [ ] Keep track of user's scores
+- [x] Keep track of user's scores
 - [x] Sent how many questions in total
 
-
+## Next steps ...
+We have made significant progress this week and now have a working model to go off of. We have mostly completed all of the main functions required for the client-server communication to be successful. This week should be the testing and debugging stage. We can also begin to implement some of the additional ideas that we talked about (such as live score, replay function, gameroom, etc...)
 
 
 ## Questions
