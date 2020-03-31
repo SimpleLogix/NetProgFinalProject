@@ -90,6 +90,8 @@ def handleClient(conn): #this is what shows up for each client
     conn.send(str(client_score).encode())
 
     #send the scoreboard in str (json/dict format) ... client needs get_scoreboard()
+    # Alex: Get scoreboard is show_leaderboard() function from the GUI.py
+    # 
     #send_scoreboard(conn)
 
     conn.close()

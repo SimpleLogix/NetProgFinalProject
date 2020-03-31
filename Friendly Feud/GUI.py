@@ -27,9 +27,16 @@ NUMBER_OF_QUESTIONS = 5
 # ----------------------------Main window---------------------------------------
 root = Tk()
 root.title(NAME_OF_THE_GAME)
-root.geometry(WINDOW_SIZE)
 
-#backgroundImage = PhotoImage(file='../doc/app.jpg')
+#root.geometry(WINDOW_SIZE)
+
+# ----------------------------Geometry for frames inside the root
+windowWidth = root.winfo_reqwidth()
+windowHeight = root.winfo_reqheight()
+positionRight = int(root.winfo_screenwidth()/2 - windowWidth/2)
+positionDown = int(root.winfo_screenheight()/2 - windowHeight/2)
+
+# Set window size
 
 # ----- Store an integer as a picked choice identifier
 v = IntVar()
@@ -40,7 +47,8 @@ current_question = StringVar()
 a2 = StringVar()
 a3 = StringVar()
 a4 = StringVar()
-questions_left = NUMBER_OF_QUESTIONS # Show score when all questions are answered
+questions_left = NUMBER_OF_QUESTIONS
+# This is where the player scores can be inserted from the server
 scores = {'player1':0,'player2':0,'player3':0}
 question_frame = Frame(root)
 
@@ -113,12 +121,31 @@ def show_leaderboard():
     # -----------------------------------Leaderboard frame--------------------------
 
     leaderboard_frame = Frame(root)
-    player_one_label = Label(leaderboard_frame,text='Player 1').grid(row=0, column=0)
-    player_one_score = Label(leaderboard_frame,text=scores['player1']).grid(row=0, column=1)
-    player_two_label = Label(leaderboard_frame,text='Player 2').grid(row=1, column=0)
-    player_two_score = Label(leaderboard_frame,text=scores['player2']).grid(row=1, column=1)
-    player_three_label = Label(leaderboard_frame,text='Player 3').grid(row=2, column=0)
-    player_three_score = Label(leaderboard_frame,text=scores['player3']).grid(row=2, column=1)
+    
+    player_one_label = Label(leaderboard_frame,text='Player 1').grid(row=0,
+                                                                     column=0,
+                                                                     padx=3,
+                                                                     pady=3)
+    player_one_score = Label(leaderboard_frame,text=scores['player1']).grid(row=0,
+                                                                            column=1,
+                                                                            padx=3,
+                                                                            pady=3)
+    player_two_label = Label(leaderboard_frame,text='Player 2').grid(row=1,
+                                                                     column=0,
+                                                                     padx=3,
+                                                                     pady=3)
+    player_two_score = Label(leaderboard_frame,text=scores['player2']).grid(row=1,
+                                                                            column=1,
+                                                                            padx=3,
+                                                                            pady=3)
+    player_three_label = Label(leaderboard_frame,text='Player 3').grid(row=2,
+                                                                       column=0,
+                                                                       padx=3,
+                                                                       pady=3)
+    player_three_score = Label(leaderboard_frame,text=scores['player3']).grid(row=2,
+                                                                              column=1,
+                                                                              padx=3,
+                                                                              pady=3)
 
     button_close_leaderboard = Button(leaderboard_frame, text="close",
                                   bg='white',
@@ -181,7 +208,7 @@ def show_current_question():
     # Send the value from the checkbox to the server
     def sendToServer():
         '''This function sends an answer to the server'''
-        global questions_left,individual_score,v
+        global questions_left,individual_score,v, scores
         
         # Case when no answer given
         if v.get() == 0:
@@ -192,6 +219,15 @@ def show_current_question():
         if questions_left == 0:
             question_frame.destroy()
             print('Show leaderboard here')
+            # SET questions from the leaderboard's server data
+            scores['player1'] = 1
+            scores['player2'] = 2
+            scores['player3'] = 3
+
+            # Show player's score
+            box.showinfo('Your score!', str(individual_score))
+
+            # Show leaderboard with updated values from the server
             show_leaderboard().grid(row=0,column=1)
 
             #sending to server
@@ -201,7 +237,6 @@ def show_current_question():
             client_socket.send('REQUESTING CLIENT SCORE'.encode())
             individual_score = client_socket.recv(1024).decode() #THIS IS WHERE THE END OF COMMUNICATION IS
 
-            box.showinfo('Your score!', str(individual_score))
             # reset questions left for the next game
             questions_left = NUMBER_OF_QUESTIONS
             
