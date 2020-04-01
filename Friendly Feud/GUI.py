@@ -92,11 +92,11 @@ submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
 
 # ---------------------------Username frame-------------------------------------
 usernameFrame = Frame(root)
-label_username = Label(usernameFrame,text='Username:').grid(row=0,column=1)
+label_username = Label(usernameFrame,text='Username:',font=submitButtonFontSize).grid(row=0,column=1)
 # Hold username
 uString = StringVar()
 # Entry to ask for a username
-userNameEntry = Entry(usernameFrame,textvariable=uString,width=20).grid(row=0,column=2)
+userNameEntry = Entry(usernameFrame,textvariable=uString,width=20,font=submitButtonFontSize).grid(row=0,column=2)
     
 def set_username():
     '''Get text from the entry and send it to the server'''
@@ -110,8 +110,9 @@ def set_username():
 # Button to set username
 button_get_username = Button(usernameFrame, text="Submit",
                           bg='white',
-                          padx=5,
+                          padx=20,
                           bd=0,
+                          font=submitButtonFontSize,
                           command=set_username).grid(row=0,column=3)
 
 usernameFrame.grid(row=0,column=1)
@@ -121,37 +122,40 @@ def show_leaderboard():
     # -----------------------------------Leaderboard frame--------------------------
 
     leaderboard_frame = Frame(root)
+
+    leaderboard_scores = Label(leaderboard_frame, text='SCORES',font=questionFontSize).grid(row=0,column=0,columnspan=3)
     
-    player_one_label = Label(leaderboard_frame,text='Player 1').grid(row=0,
+    player_one_label = Label(leaderboard_frame,text='Player 1',font=questionFontSize).grid(row=1,
                                                                      column=0,
-                                                                     padx=3,
-                                                                     pady=3)
-    player_one_score = Label(leaderboard_frame,text=scores['player1']).grid(row=0,
+                                                                     padx=15,
+                                                                     pady=15)
+    player_one_score = Label(leaderboard_frame,text=scores['player1'],font=questionFontSize).grid(row=1,
                                                                             column=1,
-                                                                            padx=3,
-                                                                            pady=3)
-    player_two_label = Label(leaderboard_frame,text='Player 2').grid(row=1,
+                                                                            padx=15,
+                                                                            pady=15)
+    player_two_label = Label(leaderboard_frame,text='Player 2',font=questionFontSize).grid(row=2,
                                                                      column=0,
-                                                                     padx=3,
-                                                                     pady=3)
-    player_two_score = Label(leaderboard_frame,text=scores['player2']).grid(row=1,
+                                                                     padx=15,
+                                                                     pady=15)
+    player_two_score = Label(leaderboard_frame,text=scores['player2'],font=questionFontSize).grid(row=2,
                                                                             column=1,
-                                                                            padx=3,
-                                                                            pady=3)
-    player_three_label = Label(leaderboard_frame,text='Player 3').grid(row=2,
+                                                                            padx=15,
+                                                                            pady=15)
+    player_three_label = Label(leaderboard_frame,text='Player 3',font=questionFontSize).grid(row=3,
                                                                        column=0,
-                                                                       padx=3,
-                                                                       pady=3)
-    player_three_score = Label(leaderboard_frame,text=scores['player3']).grid(row=2,
+                                                                       padx=15,
+                                                                       pady=15)
+    player_three_score = Label(leaderboard_frame,text=scores['player3'],font=questionFontSize).grid(row=3,
                                                                               column=1,
-                                                                              padx=3,
-                                                                              pady=3)
+                                                                              padx=15,
+                                                                              pady=15)
 
     button_close_leaderboard = Button(leaderboard_frame, text="close",
                                   bg='white',
-                                  padx=5,
+                                  padx=20,
                                   bd=0,
-                                  command=lambda : leaderboard_frame.grid_forget()).grid(row=3,column=0)
+                                  font=submitButtonFontSize,
+                                  command=lambda : leaderboard_frame.grid_forget()).grid(row=4,column=0,columnspan=3)
 
     return leaderboard_frame
 
@@ -267,7 +271,7 @@ def show_current_question():
                               width=20,
                               height=3,
                               bd=0,
-                              command=sendToServer).grid(row=6,column=1)
+                              command=sendToServer).grid(row=6,column=1,columnspan=2)
     question_frame.grid(row=0, column=1)
     return question_frame
 
