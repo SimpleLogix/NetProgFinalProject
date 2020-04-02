@@ -3,6 +3,7 @@
 
 # ----------------------------Necessary imports tkinter
 from tkinter import *
+from tkinter import ttk
 import tkinter.messagebox as box
 import tkinter.font as tkFont
 
@@ -27,8 +28,7 @@ NUMBER_OF_QUESTIONS = 5
 # ----------------------------Main window---------------------------------------
 root = Tk()
 root.title(NAME_OF_THE_GAME)
-
-#root.geometry(WINDOW_SIZE)
+root.resizable(0,0)
 
 # ----------------------------Geometry for frames inside the root
 windowWidth = root.winfo_reqwidth()
@@ -92,11 +92,19 @@ submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
 
 # ---------------------------Username frame-------------------------------------
 usernameFrame = Frame(root)
-label_username = Label(usernameFrame,text='Username:',font=submitButtonFontSize).grid(row=0,column=1)
+# Create an image
+photo = PhotoImage(file="question.gif")
+label = Label(usernameFrame,image=photo)
+# set image to the label
+label.image = photo
+# show image
+label.grid(row=1, column=0,columnspan=3,sticky='nesw')
+# create username
+label_username = Label(usernameFrame,text='Username:',font=submitButtonFontSize).grid(row=0,column=1,sticky='nesw')
 # Hold username
 uString = StringVar()
 # Entry to ask for a username
-userNameEntry = Entry(usernameFrame,textvariable=uString,width=20,font=submitButtonFontSize).grid(row=0,column=2)
+userNameEntry = Entry(usernameFrame,textvariable=uString,width=20,font=submitButtonFontSize).grid(row=0,column=2,sticky='nesw')
     
 def set_username():
     '''Get text from the entry and send it to the server'''
@@ -113,9 +121,9 @@ button_get_username = Button(usernameFrame, text="Submit",
                           padx=20,
                           bd=0,
                           font=submitButtonFontSize,
-                          command=set_username).grid(row=0,column=3)
+                          command=set_username).grid(row=0,column=3,sticky='nesw')
 
-usernameFrame.grid(row=0,column=1)
+usernameFrame.grid(row=0,column=1,sticky='nesw')
 # ------------------------------------------------------------------------------
 
 def show_leaderboard():
@@ -165,7 +173,17 @@ def show_current_question():
     '''Returns question frame with button handlers'''
     # -----------------------------------Question frame-----------------------------
     global question_frame, current_question, a1, a2, a3, a4
-    question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).grid(row=0,column=0)
+
+    # Progressbar how many questions left
+    progressBar = ttk.Progressbar(question_frame, orient = HORIZONTAL,
+                          length=100, mode='indeterminate')
+    
+    progressBar['value'] = questions_left * 20 + 1
+    question_frame.update_idletasks()
+    progressBar.grid(row=0,column=0,sticky="nsew")
+    
+    question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).grid(row=1,column=0,sticky='nesw')
+    
     
 
     first = Radiobutton(question_frame,textvariable=a1,
@@ -176,7 +194,7 @@ def show_current_question():
                             width=20,
                             bd=0,
                             height=4,
-                            value=1).grid(row=1,column=1)
+                            value=1).grid(row=2,column=1)
 
 
 
@@ -187,7 +205,7 @@ def show_current_question():
                              width=20,
                              bd=0,
                              height=4,
-                             value=2).grid(row=2,column=1)
+                             value=2).grid(row=3,column=1)
 
     third = Radiobutton(question_frame,textvariable=a3,
                             variable=v,
@@ -196,7 +214,7 @@ def show_current_question():
                             width=20,
                             bd=0,
                             height=4,
-                            value=3).grid(row=3,column=1)
+                            value=3).grid(row=4,column=1)
 
     fourth = Radiobutton(question_frame,textvariable=a4,
                              variable=v,
@@ -205,7 +223,7 @@ def show_current_question():
                              width=20,
                              bd=0,
                              height=4,
-                             value=4).grid(row=4,column=1)
+                             value=4).grid(row=5,column=1)
 
 
     # Submit button handler
@@ -217,6 +235,7 @@ def show_current_question():
         # Case when no answer given
         if v.get() == 0:
             box.showinfo('Oops...','Have to pick one of the provided answers')
+            # Should not send any request for the next question
 
         questions_left -= 1
         # Decide when to show score
@@ -272,7 +291,9 @@ def show_current_question():
                               height=3,
                               bd=0,
                               command=sendToServer).grid(row=6,column=1,columnspan=2)
-    question_frame.grid(row=0, column=1)
+
+    
+    question_frame.grid(row=1, column=0,sticky='nesw')
     return question_frame
 
 
