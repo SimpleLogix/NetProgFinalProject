@@ -92,19 +92,28 @@ submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
 
 # ---------------------------Username frame-------------------------------------
 usernameFrame = Frame(root)
+usernameFrame.grid_columnconfigure(0, weight=1)
 # Create an image
 photo = PhotoImage(file="question.gif")
 label = Label(usernameFrame,image=photo)
 # set image to the label
 label.image = photo
 # show image
-label.grid(row=1, column=0,columnspan=3,sticky='nesw')
+label.grid(row=1, column=0,sticky='ew')
 # create username
-label_username = Label(usernameFrame,text='Username:',font=submitButtonFontSize).grid(row=0,column=1,sticky='nesw')
+label_username = Label(usernameFrame,text='Username:',font=submitButtonFontSize).grid(row=0,column=1)
 # Hold username
 uString = StringVar()
 # Entry to ask for a username
-userNameEntry = Entry(usernameFrame,textvariable=uString,width=20,font=submitButtonFontSize).grid(row=0,column=2,sticky='nesw')
+userNameEntry = Entry(usernameFrame,textvariable=uString,width=20,font=submitButtonFontSize).grid(row=0,column=2)
+
+# ---------------------------Exit from the program
+def exitTheProgram():
+    '''Destroy the window'''
+    var = box.askyesno('Exiting','Are you sure?')
+    if var == 1:
+        box.showinfo('Exiting','Come back soon!')
+        root.destroy()
     
 def set_username():
     '''Get text from the entry and send it to the server'''
@@ -125,6 +134,7 @@ button_get_username = Button(usernameFrame, text="Submit",
 
 usernameFrame.grid(row=0,column=1,sticky='nesw')
 # ------------------------------------------------------------------------------
+
 
 def show_leaderboard():
     # -----------------------------------Leaderboard frame--------------------------
@@ -167,6 +177,27 @@ def show_leaderboard():
 
     return leaderboard_frame
 
+def final_screen():
+    '''Final screen where the player exit the game or restart the game'''
+    final_screen_frame = Frame(root)
+    button_play_again = Button(leaderboard_frame, text="PLAY AGAIN",
+                                  bg='white',
+                                  padx=20,
+                                  bd=0,
+                                  font=submitButtonFontSize,
+                                  command=lambda : final_screen_frame.grid_forget()).grid(row=4,column=0,columnspan=3)
+
+
+    button_exit = Button(leaderboard_frame, text="EXIT",
+                                  bg='white',
+                                  padx=20,
+                                  bd=0,
+                                  font=submitButtonFontSize,
+                                  command=exitTheProgram).grid(row=5,column=0,columnspan=3)
+
+    return final_screen_frame
+    
+
 # ------------------------------------------------------------------------------
     
 def show_current_question():
@@ -180,7 +211,7 @@ def show_current_question():
     
     progressBar['value'] = questions_left * 20 + 1
     question_frame.update_idletasks()
-    progressBar.grid(row=0,column=0,sticky="nsew")
+    progressBar.grid(row=0,column=0,columnspan=3)
     
     question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).grid(row=1,column=0,sticky='nesw')
     
@@ -317,13 +348,7 @@ def showCredits():
     '''Show credits. List people who created this game'''
     box.showinfo('Credits','This is created by Walid, Daniel, Alex. WDA team')
 
-# ---------------------------Exit from the program
-def exitTheProgram():
-    '''Destroy the window'''
-    var = box.askyesno('Exiting','Are you sure?')
-    if var == 1:
-        box.showinfo('Exiting','Come back soon!')
-        root.destroy()
+
 
 # ----------------------------Create a menu
 menu = Menu(root)
