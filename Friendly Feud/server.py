@@ -6,9 +6,11 @@ import _thread, time
 import json
 from random import randrange
 
-#--------------------------------------------
-# BACK-END STORAGE FOR QUESTIONS AND ANSWERS
-#--------------------------------------------
+#-----------------------------------------------------
+#       BACK-END STORAGE FOR QUESTIONS AND ANSWERS
+#-----------------------------------------------------
+NUMBER_OF_QUESTIONS = 10 # 10 questions
+
 QUESTIONS = {} 
 
 with open ('questions.JSON') as inputfile:
@@ -16,6 +18,7 @@ with open ('questions.JSON') as inputfile:
     inputfile.close()
 
 client_number = 0 #to keep track of users that join the game
+
 users_and_scores = {
     "user1" : {
         "username" : "Player 1",
@@ -43,11 +46,6 @@ server_socket.bind((host,port))
 server_socket.listen(2)
 
 
-def now():
-    """ Returns the current time in string
-    """
-    return time.ctime(time.time())
-
 def handleClient(conn): #this is what shows up for each client
     """ This is how the server will handle each client that connects
         This function will run once for every client but may not all be synced
@@ -58,7 +56,7 @@ def handleClient(conn): #this is what shows up for each client
     user_ID = 'user' + str(client_number) #store the User ID to avoid bugs when other users connect
     username = conn.recv(1024).decode()
     if not username:
-        username = str(conn.address)    
+        username = user_ID    
     users_and_scores[user_ID]['username'] = username
     print(username + " connected to server.")
    
@@ -69,7 +67,8 @@ def handleClient(conn): #this is what shows up for each client
 
     client_score = 0
 
-    for _i in range(5): #LOOP begins when the clien hits start game
+    # MAIN GAME LOOP
+    for _i in range(NUMBER_OF_QUESTIONS): 
 
         answer_key = send_question(conn) #send the first question
         conn.send("QUESTIONS SENT".encode())
@@ -80,19 +79,10 @@ def handleClient(conn): #this is what shows up for each client
         if user_answer == answer_key: #check the answer
             client_score += 1
     
-    print(username + ' finished the game.')
-    print('score : ' + str(client_score))
 
-    #Updating the scoreboard
+    #Updating and sending the scoreboard
     users_and_scores[user_ID]['score'] = client_score
-
-    #SEND THE SCORE (may need to also send the userID to distinguish clients
-    conn.send(str(client_score).encode())
-
-    #send the scoreboard in str (json/dict format) ... client needs get_scoreboard()
-    # Alex: Get scoreboard is show_leaderboard() function from the GUI.py
-    # 
-    #send_scoreboard(conn)
+    send_scoreboard(conn)
 
     conn.close()
 
@@ -102,7 +92,7 @@ def handleClient(conn): #this is what shows up for each client
 
 # Send question to client and return the answer
 def send_question(conn):
-        
+    #TODO: change Q/Category range once questions file is updated
     question_ID = 'question' + str(randrange(5)) #pick a random question 0-4
     category_ID = 'Category' + str(randrange(2)) 
     
@@ -122,8 +112,7 @@ def send_scoreboard(conn):
 
 
 def send_data_to_client(conn, message):
-    """ send the message from the server to the client
-        inputs are the server connection, and the message
+    """ send a message, receive STATUS
     """
     conn.send(message.encode())
     conn.recv(1024).decode() #STATUS: RECEIVED
@@ -142,7 +131,6 @@ def server_program3():
 
     while True:
         conn, address = server_socket.accept()
-        print("Connection form: " + str(address) + ' at ' + str(now())) #debugging purposes ... 
         
         #IF SERVER REACHES MAX CAPACITY, RESET CLIENT_NUMBER AND #TODO: START NEW ROOM
         if client_number == 3: 

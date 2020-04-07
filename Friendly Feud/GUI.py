@@ -11,6 +11,7 @@ import tkinter.font as tkFont
 # ----------------------------Imports for communication
 import socket
 import time
+import json
 
 # setting the IP and ports
 client_IP = socket.gethostname()
@@ -24,7 +25,7 @@ individual_score = 0
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
 WINDOW_SIZE = '500x500'
-NUMBER_OF_QUESTIONS = 5
+NUMBER_OF_QUESTIONS = 10 # 10 questions
 # ----------------------------Main window---------------------------------------
 root = Tk()
 root.title(NAME_OF_THE_GAME)
@@ -43,6 +44,11 @@ v = IntVar()
 a1 = StringVar()
 # ----------------------------Global variables used by client.py
 username = ''
+# ----------------------------Usernames for the leaderboard from the server's json
+leader_player_one=''
+leader_player_two=''
+leader_player_three=''
+
 current_question = StringVar()
 a2 = StringVar()
 a3 = StringVar()
@@ -62,25 +68,20 @@ def get_question_from_server():
     global current_question, a1,a2,a3,a4
 
     #receive the question and choices in pieces
-
+    
     current_question.set(str(client_socket.recv(1024).decode()))
-    print('Question: ',current_question.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
     a1.set(str(client_socket.recv(1024).decode()))
-    print('choice 1: ',a1.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
     a2.set(str(client_socket.recv(1024).decode()))
-    print('choice 2: ',a2.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
     a3.set(str(client_socket.recv(1024).decode()))
-    print("choice 3: ", a3.get()) # FOR Debugging Purposes ...
-    client_socket.send('STATUS: RECEIVED'.encode())  # Stopped here
+    client_socket.send('STATUS: RECEIVED'.encode())  
 
     a4.set(str(client_socket.recv(1024).decode()))
-    print('choice 4:',a4.get()) # FOR Debugging Purposes ...
     client_socket.send('STATUS: RECEIVED'.encode())
 
 
@@ -143,7 +144,7 @@ def show_leaderboard():
 
     leaderboard_scores = Label(leaderboard_frame, text='SCORES',font=questionFontSize).grid(row=0,column=0,columnspan=3)
     
-    player_one_label = Label(leaderboard_frame,text='Player 1',font=questionFontSize).grid(row=1,
+    player_one_label = Label(leaderboard_frame,text=leader_player_one,font=questionFontSize).grid(row=1,
                                                                      column=0,
                                                                      padx=15,
                                                                      pady=15)
@@ -151,7 +152,7 @@ def show_leaderboard():
                                                                             column=1,
                                                                             padx=15,
                                                                             pady=15)
-    player_two_label = Label(leaderboard_frame,text='Player 2',font=questionFontSize).grid(row=2,
+    player_two_label = Label(leaderboard_frame,text=leader_player_two,font=questionFontSize).grid(row=2,
                                                                      column=0,
                                                                      padx=15,
                                                                      pady=15)
@@ -159,7 +160,7 @@ def show_leaderboard():
                                                                             column=1,
                                                                             padx=15,
                                                                             pady=15)
-    player_three_label = Label(leaderboard_frame,text='Player 3',font=questionFontSize).grid(row=3,
+    player_three_label = Label(leaderboard_frame,text=leader_player_three,font=questionFontSize).grid(row=3,
                                                                        column=0,
                                                                        padx=15,
                                                                        pady=15)
@@ -180,7 +181,7 @@ def show_leaderboard():
 def final_screen():
     '''Final screen where the player exit the game or restart the game'''
     final_screen_frame = Frame(root)
-    button_play_again = Button(leaderboard_frame, text="PLAY AGAIN",
+    button_play_again = Button(final_screen_frame, text="PLAY AGAIN",
                                   bg='white',
                                   padx=20,
                                   bd=0,
@@ -188,7 +189,7 @@ def final_screen():
                                   command=lambda : final_screen_frame.grid_forget()).grid(row=4,column=0,columnspan=3)
 
 
-    button_exit = Button(leaderboard_frame, text="EXIT",
+    button_exit = Button(final_screen_frame, text="EXIT",
                                   bg='white',
                                   padx=20,
                                   bd=0,
@@ -261,7 +262,7 @@ def show_current_question():
     # Send the value from the checkbox to the server
     def sendToServer():
         '''This function sends an answer to the server'''
-        global questions_left,individual_score,v, scores
+        global questions_left,individual_score,v, scores, leader_player_one,leader_player_two,leader_player_three
         
         # Case when no answer given
         if v.get() == 0:
@@ -272,25 +273,34 @@ def show_current_question():
         # Decide when to show score
         if questions_left == 0:
             question_frame.destroy()
-            print('Show leaderboard here')
-            # SET questions from the leaderboard's server data
-            scores['player1'] = 1
-            scores['player2'] = 2
-            scores['player3'] = 3
-
-            # Show player's score
-            box.showinfo('Your score!', str(individual_score))
-
-            # Show leaderboard with updated values from the server
-            show_leaderboard().grid(row=0,column=1)
+          
 
             #sending to server
             client_socket.recv(1024).decode() 
             client_socket.send(str(v.get()).encode()) #send the answer to server
             client_socket.recv(1024).decode() 
             client_socket.send('REQUESTING CLIENT SCORE'.encode())
-            individual_score = client_socket.recv(1024).decode() #THIS IS WHERE THE END OF COMMUNICATION IS
+            group_score = client_socket.recv(1024).decode() #THIS IS WHERE THE END OF COMMUNICATION IS
+            
+            data = json.loads(group_score)
 
+            #------set scores from data
+            print('Show leaderboard here')
+            # SET player scores from the leaderboard's server data
+            
+            scores['player1'] = data['user1']['score']
+            scores['player2'] = data['user2']['score']
+            scores['player3'] = data['user3']['score']
+
+            # SET player's usernames
+            leader_player_one = data['user1']['username']
+            leader_player_two = data['user2']['username']
+            leader_player_three = data['user3']['username']
+            
+
+            # Show leaderboard with updated values from the server
+            show_leaderboard().grid(row=0,column=1)
+            
             # reset questions left for the next game
             questions_left = NUMBER_OF_QUESTIONS
             

@@ -1,13 +1,13 @@
 {
     "Category0" : {
-        "question0" : {
-            "question" : "Q1",
-            "choice1" : "A1",
-            "choice2" : "A2",
-            "choice3" : "A3",
-            "choice4" : "A4",
-            "answer" : "3"
-        },
+      "question0": {
+        "question": "Is shooting in a competition a olympic sport?",
+        "choice1": "yes",
+        "choice2": "no",
+        "choice3": "no, but was for a brief moment",
+        "choice4": "yes, but soon will not be",
+        "answer": "1"
+      },
         "question1" : {
             "question" : "Q2",
             "choice1" : "A1",
