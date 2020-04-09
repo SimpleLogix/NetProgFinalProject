@@ -1,4 +1,4 @@
-from tkinter import Tk, PhotoImage, StringVar,IntVar,Canvas
+from tkinter import Tk, PhotoImage,Canvas
 from tkinter.ttk import Frame, Button, Label, Entry, Progressbar, Radiobutton
 from tkinter import messagebox as mbox
 
@@ -10,9 +10,9 @@ class Username(Frame):
         Pass user to determine where to set name
     '''
 
-    def __init__(self,player):
-        self.uString = StringVar()
-        self.player = player
+    def __init__(self):
+        self.uString = ''
+##        self.player = player
         super().__init__()
         self.initMain()
 
@@ -43,12 +43,14 @@ class Username(Frame):
 
     def set_username(self):
         '''Get text from the entry and send it to the server'''
-        self.username = self.uString.get()
-        self.player.client_socket.send(self.username.encode())
+        self.username = self.uString
+##        self.player.client_socket.send(self.username.encode())
         # This line freezing the UI
         #time.sleep(10)
         print('Username is : ', self.username)
         self.grid_forget()
         self.destroy()
-        
+
+if __name__ == '__main__':
+    f = Username()
         

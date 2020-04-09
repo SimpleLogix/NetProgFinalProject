@@ -3,6 +3,7 @@ from tkinter.ttk import Frame
 from tkinter import Tk, PhotoImage, StringVar,IntVar,Canvas
 from tkinter.ttk import Frame, Button, Label, Entry, Progressbar, Radiobutton
 from tkinter import messagebox as mbox
+
 # Shows scores for players
 class Question(Frame):
     '''

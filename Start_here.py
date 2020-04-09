@@ -17,13 +17,6 @@ def main():
     username = Username(p1) # Set players username
     question = Question(p1)
 
-    # This is how to set questions
-    question.question.set('New question')
-    question.a1.set('New answer')
-    question.a2.set('Question answer')
-    question.a3.set('Super answer')
-    question.a4.set('Kick up')
-
     root.mainloop()
 
 if __name__ == '__main__':
