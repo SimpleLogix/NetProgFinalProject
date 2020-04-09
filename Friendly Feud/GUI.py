@@ -20,16 +20,17 @@ port = 7500
 #Open a socket and connect the client to the server
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((client_IP, port))
-# 
+# Individual score
 individual_score = 0
+
+
 # ----------------------------Global constants
 NAME_OF_THE_GAME = 'Friendly Feud'
-WINDOW_SIZE = '500x500'
+WINDOW_SIZE = '500x800'
 NUMBER_OF_QUESTIONS = 10 # 10 questions
 # ----------------------------Main window---------------------------------------
 root = Tk()
 root.title(NAME_OF_THE_GAME)
-root.resizable(0,0)
 
 # ----------------------------Geometry for frames inside the root
 windowWidth = root.winfo_reqwidth()
@@ -93,20 +94,21 @@ submitButtonFontSize = tkFont.Font(family="Helvetica", size=12)
 
 # ---------------------------Username frame-------------------------------------
 usernameFrame = Frame(root)
-usernameFrame.grid_columnconfigure(0, weight=1)
+usernameFrame.pack()
 # Create an image
-photo = PhotoImage(file="question.gif")
-label = Label(usernameFrame,image=photo)
-# set image to the label
-label.image = photo
-# show image
-label.grid(row=1, column=0,sticky='ew')
+w = Canvas(usernameFrame,height=450,width=450)
+w.pack(expand=True, fill='both')
+# Create an image
+w.image = PhotoImage(file="giphy.gif")
+w.create_image(0,0, image=w.image,anchor='nw')
+        
+
 # create username
-label_username = Label(usernameFrame,text='Username:',font=submitButtonFontSize).grid(row=0,column=1)
+label_username = Label(usernameFrame,text='Username:',font=submitButtonFontSize).pack()
 # Hold username
 uString = StringVar()
 # Entry to ask for a username
-userNameEntry = Entry(usernameFrame,textvariable=uString,width=20,font=submitButtonFontSize).grid(row=0,column=2)
+userNameEntry = Entry(usernameFrame,textvariable=uString,width=20,font=submitButtonFontSize).pack()
 
 # ---------------------------Exit from the program
 def exitTheProgram():
@@ -122,7 +124,7 @@ def set_username():
     username = uString.get()
     client_socket.send(username.encode())
     #time.sleep(10)
-    usernameFrame.grid_forget()
+    usernameFrame.pack_forget()
     usernameFrame.destroy()
 
 # Button to set username
@@ -131,52 +133,37 @@ button_get_username = Button(usernameFrame, text="Submit",
                           padx=20,
                           bd=0,
                           font=submitButtonFontSize,
-                          command=set_username).grid(row=0,column=3,sticky='nesw')
+                          command=set_username).pack()
 
-usernameFrame.grid(row=0,column=1,sticky='nesw')
+usernameFrame.pack()
 # ------------------------------------------------------------------------------
 
 
 def show_leaderboard():
     # -----------------------------------Leaderboard frame--------------------------
-
+    
     leaderboard_frame = Frame(root)
 
-    leaderboard_scores = Label(leaderboard_frame, text='SCORES',font=questionFontSize).grid(row=0,column=0,columnspan=3)
+    leaderboard_scores = Label(leaderboard_frame, text='SCORES',font=questionFontSize).pack()
     
-    player_one_label = Label(leaderboard_frame,text=leader_player_one,font=questionFontSize).grid(row=1,
-                                                                     column=0,
-                                                                     padx=15,
-                                                                     pady=15)
-    player_one_score = Label(leaderboard_frame,text=scores['player1'],font=questionFontSize).grid(row=1,
-                                                                            column=1,
-                                                                            padx=15,
-                                                                            pady=15)
-    player_two_label = Label(leaderboard_frame,text=leader_player_two,font=questionFontSize).grid(row=2,
-                                                                     column=0,
-                                                                     padx=15,
-                                                                     pady=15)
-    player_two_score = Label(leaderboard_frame,text=scores['player2'],font=questionFontSize).grid(row=2,
-                                                                            column=1,
-                                                                            padx=15,
-                                                                            pady=15)
-    player_three_label = Label(leaderboard_frame,text=leader_player_three,font=questionFontSize).grid(row=3,
-                                                                       column=0,
-                                                                       padx=15,
-                                                                       pady=15)
-    player_three_score = Label(leaderboard_frame,text=scores['player3'],font=questionFontSize).grid(row=3,
-                                                                              column=1,
-                                                                              padx=15,
-                                                                              pady=15)
+    player_one_label = Label(leaderboard_frame,text=leader_player_one,font=questionFontSize).pack()
+    player_one_score = Label(leaderboard_frame,text=scores['player1'],font=questionFontSize).pack()
+    player_two_label = Label(leaderboard_frame,text=leader_player_two,font=questionFontSize).pack()
+    player_two_score = Label(leaderboard_frame,text=scores['player2'],font=questionFontSize).pack()
+    player_three_label = Label(leaderboard_frame,text=leader_player_three,font=questionFontSize).pack()
+    player_three_score = Label(leaderboard_frame,text=scores['player3'],font=questionFontSize).pack()
 
+    
+    
+    # Exit the program
     button_close_leaderboard = Button(leaderboard_frame, text="close",
                                   bg='white',
                                   padx=20,
                                   bd=0,
                                   font=submitButtonFontSize,
-                                  command=lambda : leaderboard_frame.grid_forget()).grid(row=4,column=0,columnspan=3)
-
+                                  command=exitTheProgram).pack()
     return leaderboard_frame
+
 
 def final_screen():
     '''Final screen where the player exit the game or restart the game'''
@@ -186,7 +173,7 @@ def final_screen():
                                   padx=20,
                                   bd=0,
                                   font=submitButtonFontSize,
-                                  command=lambda : final_screen_frame.grid_forget()).grid(row=4,column=0,columnspan=3)
+                                  command=lambda : final_screen_frame.pack_forget())
 
 
     button_exit = Button(final_screen_frame, text="EXIT",
@@ -194,7 +181,7 @@ def final_screen():
                                   padx=20,
                                   bd=0,
                                   font=submitButtonFontSize,
-                                  command=exitTheProgram).grid(row=5,column=0,columnspan=3)
+                                  command=exitTheProgram).pack()
 
     return final_screen_frame
     
@@ -206,15 +193,24 @@ def show_current_question():
     # -----------------------------------Question frame-----------------------------
     global question_frame, current_question, a1, a2, a3, a4
 
+    # image for the questions
+    # Create an image
+    w = Canvas(question_frame,height=250,width=250)
+    w.pack(expand=True, fill='both')
+    # Create an image
+    w.image = PhotoImage(file="time.gif")
+    w.create_image(0,0, image=w.image,anchor='nw')
+    
+
     # Progressbar how many questions left
     progressBar = ttk.Progressbar(question_frame, orient = HORIZONTAL,
                           length=100, mode='indeterminate')
     
-    progressBar['value'] = questions_left * 20 + 1
+    progressBar['value'] += questions_left * 10 + 1
     question_frame.update_idletasks()
-    progressBar.grid(row=0,column=0,columnspan=3)
+    progressBar.pack()
     
-    question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).grid(row=1,column=0,sticky='nesw')
+    question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).pack()
     
     
 
@@ -226,7 +222,7 @@ def show_current_question():
                             width=20,
                             bd=0,
                             height=4,
-                            value=1).grid(row=2,column=1)
+                            value=1).pack()
 
 
 
@@ -237,7 +233,7 @@ def show_current_question():
                              width=20,
                              bd=0,
                              height=4,
-                             value=2).grid(row=3,column=1)
+                             value=2).pack()
 
     third = Radiobutton(question_frame,textvariable=a3,
                             variable=v,
@@ -246,7 +242,7 @@ def show_current_question():
                             width=20,
                             bd=0,
                             height=4,
-                            value=3).grid(row=4,column=1)
+                            value=3).pack()
 
     fourth = Radiobutton(question_frame,textvariable=a4,
                              variable=v,
@@ -255,7 +251,7 @@ def show_current_question():
                              width=20,
                              bd=0,
                              height=4,
-                             value=4).grid(row=5,column=1)
+                             value=4).pack()
 
 
     # Submit button handler
@@ -272,9 +268,11 @@ def show_current_question():
         questions_left -= 1
         # Decide when to show score
         if questions_left == 0:
+            global game_counter
+            # Player need to restart the client to start new game
+            game_counter = 0
             question_frame.destroy()
           
-
             #sending to server
             client_socket.recv(1024).decode() 
             client_socket.send(str(v.get()).encode()) #send the answer to server
@@ -306,8 +304,7 @@ def show_current_question():
             
         # Answer is given
         else:
-            box.showinfo('Sent to the server','Your answer sent to the server')
-            print('Questions left to answer: ', questions_left)
+            question_frame.pack_forget()
             print(v.get())# Will print which number was selected
             client_socket.recv(1024).decode() 
             client_socket.send(str(v.get()).encode()) #send the answer to server
@@ -319,6 +316,7 @@ def show_current_question():
             # create a new frame with next question
             v.set(0) # reset the selection for the next question
             get_question_from_server()
+        
             show_current_question() #This is what we were missing, we needed to update the display
                                    
 
@@ -331,10 +329,10 @@ def show_current_question():
                               width=20,
                               height=3,
                               bd=0,
-                              command=sendToServer).grid(row=6,column=1,columnspan=2)
+                              command=sendToServer).pack()
 
     
-    question_frame.grid(row=1, column=0,sticky='nesw')
+    question_frame.pack()
     return question_frame
 
 
