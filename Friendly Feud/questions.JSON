@@ -9,82 +9,208 @@
         "answer": "1"
       },
         "question1" : {
-            "question" : "Q2",
-            "choice1" : "A1",
-            "choice2" : "A2",
-            "choice3" : "A3",
-            "choice4" : "A4",
+            "question" : "Will the 2020 Olympics in Tokyo continue?",
+            "choice1" : "yes",
+            "choice2" : "no",
+            "choice3" : "yes but in 2021 cause of the corona virus",
+            "choice4" : "I dont know nor care",
             "answer" : "3"
         },
         "question2" : {
-            "question" : "Q3",
-            "choice1" : "A1",
-            "choice2" : "A2",
-            "choice3" : "A3",
-            "choice4" : "A4",
-            "answer" : "3"
+            "question" : "Which sport is most popular in India?",
+            "choice1" : "soccer",
+            "choice2" : "baseball",
+            "choice3" : "basketball",
+            "choice4" : "cricket",
+            "answer" : "4"
         },
         "question3" : {
-            "question" : "Q4",
-            "choice1" : "A1",
-            "choice2" : "A2",
-            "choice3" : "A3",
-            "choice4" : "A4",
-            "answer" : "3"
+            "question" : "Who won the Superbowl in 2020?",
+            "choice1" : "Kansas City chiefs",
+            "choice2" : "New England Patriots",
+            "choice3" : "Green Bay Packers",
+            "choice4" : "Baltimore Reavens",
+            "answer" : "1"
         },
         "question4" : {
-            "question" : "Q5",
-            "choice1" : "A1",
-            "choice2" : "A2",
-            "choice3" : "A3",
-            "choice4" : "A4",
-            "answer" : "3"
+            "question" : "Where is American football derrived from?",
+            "choice1" : "rugby",
+            "choice2" : "football",
+            "choice3" : "Golf",
+            "choice4" : "Basketball",
+            "answer" : "1"
         }
     },
 
     "Category1" : {
         "question0" : {
-            "question" : "Q6",
-            "choice1" : "1",
-            "choice2" : "2",
-            "choice3" : "3",
-            "choice4" : "4",
+            "question" : "Whats the original name of Istanbul?",
+            "choice1" : "Istanbul",
+            "choice2" : "Constantinopel",
+            "choice3" : "Byzantium",
+            "choice4" : "Muraz",
             "answer" : "3"
         },
         "question1" : {
-            "question" : "Q7",
-            "choice1" : "1",
-            "choice2" : "2",
-            "choice3" : "3",
-            "choice4" : "4",
-            "answer" : "3"
+            "question" : "How big was the British empire at its height?",
+            "choice1" : "population 20% and land area  30%",
+            "choice2" : "population and land area nearly a quatre of the world",
+            "choice3" : "population 40 % land area 20%",
+            "choice4" : "population 20% land area 40%",
+            "answer" : "2"
         },
         "question2" : {
-            "question" : "Q8",
-            "choice1" : "1",
-            "choice2" : "2",
-            "choice3" : "3",
-            "choice4" : "4",
-            "answer" : "3"
+            "question" : "In the greek mythos who gave fire to man?",
+            "choice1" : "Prometheus",
+            "choice2" : "Zeus",
+            "choice3" : "Apolo",
+            "choice4" : "Hades",
+            "answer" : "1"
         },
         "question3" : {
-            "question" : "Q9",
-            "choice1" : "1",
-            "choice2" : "2",
-            "choice3" : "3",
-            "choice4" : "4",
+            "question" : "How old is Hindoeism the oldest religion in the world?",
+            "choice1" : "5000 years",
+            "choice2" : "10 000 years",
+            "choice3" : "30 000 years",
+            "choice4" : "50 000 years",
             "answer" : "3"
         },
         "question4" : {
-            "question" : "Q10",
-            "choice1" : "1",
-            "choice2" : "2",
-            "choice3" : "3",
-            "choice4" : "4",
+            "question" : "What flower is symbolised for WW1?",
+            "choice1" : "Tulip",
+            "choice2" : "Rose",
+            "choice3" : "Poppy",
+            "choice4" : "Narcissus",
             "answer" : "3"
         }
     },
-    "Category2" : {},
-    "Category3" : {},
-    "Category4" : {}
+    
+    "Category2" : {
+          "question0" : {
+            "question" : "What is Scientology?",
+            "choice1" : " A business",
+            "choice2" : "A religion",
+            "choice3" : "Both",
+            "choice4" : "None of the above",
+            "answer" : "3"
+        },
+        "question1" : {
+            "question" : "Which country is the current dominant superpower in the world?",
+            "choice1" : "China",
+            "choice2" : "Japan",
+            "choice3" : "Russia",
+            "choice4" : "USA",
+            "answer" : "4"
+        },
+        "question2" : {
+            "question" : "Where did the Olympics tradition originate from?",
+            "choice1" : "medieval China",
+            "choice2" : "Colonial North America",
+            "choice3" : "ancient classical Greece",
+            "choice4" : "East Roman empire",
+            "answer" : "3"
+        },
+        "question3" : {
+            "question" : "Which three religions pray for the same god?",
+            "choice1" : "Judaism, Christianity, and Islam",
+            "choice2" : "Hindoeism, Boedism, Atheism",
+            "choice3" : "Shintoism, Christianity, Islam",
+            "choice4" : "Judaism, Christianity Hindoeism",
+            "answer" : "1"
+        },
+        "question4" : {
+            "question" : "When was the end of the world supposed to be?",
+            "choice1" : "2020",
+            "choice2" : "2000",
+            "choice3" : "2050",
+            "choice4" : "2012",
+            "answer" : "4"
+        }
+    },
+    
+    "Category3" : {
+        "question0" : {
+            "question" : "What is Uranus?",
+            "choice1" : " a part of an organ",
+            "choice2" : "a planet",
+            "choice3" : "a moon",
+            "choice4" : "a star",
+            "answer" : "2"
+        },
+        "question1" : {
+            "question" : "What does a star do when it gets to big?",
+            "choice1" : "explodes, nothing else",
+            "choice2" : "implodes",
+            "choice3" : "explodes either becomes a black hole, a neutron star or a white star",
+            "choice4" : "it becomes sad... :(",
+            "answer" : "3"
+        },
+        "question2" : {
+            "question" : "What is the moon made out of?",
+            "choice1" : "Blue cheese",
+            "choice2" : "Solid and semi solid rock",
+            "choice3" : "Green cheese",
+            "choice4" : "its a hoax",
+            "answer" : "2"
+        },
+        "question3" : {
+            "question" : "Which country invented rockets?",
+            "choice1" : "The British",
+            "choice2" : "Sovjets",
+            "choice3" : "germans",
+            "choice4" : "Americans",
+            "answer" : "3"
+        },
+        "question4" : {
+            "question" : "How many states does the USA have?",
+            "choice1" : "45",
+            "choice2" : "52",
+            "choice3" : "50",
+            "choice4" : "56",
+            "answer" : "3"
+        }
+    },
+    
+    "Category4" : { 
+        "question0" : {
+            "question" : "Where did the Corona virus originate from?",
+            "choice1" : " Siberia, Russia",
+            "choice2" : "Wohan, China",
+            "choice3" : "North Carolina, USA",
+            "choice4" : "Cape Town, South Africa",
+            "answer" : "2"
+        },
+        "question1" : {
+            "question" : "how does the corona virus go from person to person?",
+            "choice1" : "its a STD like AIDS",
+            "choice2" : "its a hoax like climate change",
+            "choice3" : "stock exchange",
+            "choice4" : "by touch, also transmitted through surfaces, and can temporary go through the air using droplets ",
+            "answer" : "3"
+        },
+        "question2" : {
+            "question" : "What are essentials for quarantining in the Pandemic of 2020?",
+            "choice1" : "Toiletpaper, is love, is life...",
+            "choice2" : "Masks, alcoholic sanitizers",
+            "choice3" : "Soap, no human touching, self-isolate",
+            "choice4" : "normal routine",
+            "answer" : "3"
+        },
+        "question3" : {
+            "question" : "How deadly is the covid-19 virus?",
+            "choice1" : "10% death rate",
+            "choice2" : "20% death rate",
+            "choice3" : " 2-5% death rate",
+            "choice4" : "35% death rate",
+            "answer" : "3"
+        },
+        "question4" : {
+            "question" : "How are the stocks doing?",
+            "choice1" : "reasonably good",
+            "choice2" : "really bad worse then the 2008 recession",
+            "choice3" : "Not great but not bad either",
+            "choice4" : "worse then the 1928 recession which was one of the causes for ww2",
+            "answer" : "2"
+        }
+    }    
 }
