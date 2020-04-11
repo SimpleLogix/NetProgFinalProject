@@ -17,7 +17,7 @@ with open ('questions.JSON') as inputfile:
     QUESTIONS = json.load(inputfile)
     inputfile.close()
 
-client_number = 0 #to keep track of users that join the game
+client_number = 1 #to keep track of users that join the game
 
 users_and_scores = {
     "user1" : {
@@ -92,9 +92,8 @@ def handleClient(conn): #this is what shows up for each client
 
 # Send question to client and return the answer
 def send_question(conn):
-    #TODO: change Q/Category range once questions file is updated
     question_ID = 'question' + str(randrange(5)) #pick a random question 0-4
-    category_ID = 'Category' + str(randrange(2)) 
+    category_ID = 'Category' + str(randrange(5)) 
     
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['question']) #send the question to the client
     send_data_to_client(conn, QUESTIONS[category_ID][question_ID]['choice1']) #send choice1 to the client
@@ -132,9 +131,9 @@ def server_program3():
     while True:
         conn, address = server_socket.accept()
         
-        #IF SERVER REACHES MAX CAPACITY, RESET CLIENT_NUMBER AND #TODO: START NEW ROOM
+        #IF SERVER REACHES MAX CAPACITY, RESET CLIENT_NUMBER 
         if client_number == 3: 
-            client_number = 0 #reset ID
+            client_number = 1 #reset ID
         else:
             client_number += 1
         

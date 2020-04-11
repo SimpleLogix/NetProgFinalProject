@@ -196,22 +196,20 @@ def show_current_question():
     # image for the questions
     # Create an image
     w = Canvas(question_frame,height=250,width=250)
-    w.pack(expand=True, fill='both')
+    w.grid(row=0,column=0)
     # Create an image
     w.image = PhotoImage(file="time.gif")
     w.create_image(0,0, image=w.image,anchor='nw')
     
-
     # Progressbar how many questions left
     progressBar = ttk.Progressbar(question_frame, orient = HORIZONTAL,
                           length=100, mode='indeterminate')
     
     progressBar['value'] += questions_left * 10 + 1
     question_frame.update_idletasks()
-    progressBar.pack()
+    progressBar.grid(row=1, column=0)
     
-    question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).pack()
-    
+    question_label = Label(question_frame,textvariable=current_question,font=questionFontSize).grid(row=2,column=0)
     
 
     first = Radiobutton(question_frame,textvariable=a1,
@@ -222,9 +220,7 @@ def show_current_question():
                             width=20,
                             bd=0,
                             height=4,
-                            value=1).pack()
-
-
+                            value=1).grid(row=3, column=0,sticky="nsew")
 
     second = Radiobutton(question_frame,textvariable=a2,
                              variable=v,
@@ -233,7 +229,7 @@ def show_current_question():
                              width=20,
                              bd=0,
                              height=4,
-                             value=2).pack()
+                             value=2).grid(row=4, column=0,sticky="nsew")
 
     third = Radiobutton(question_frame,textvariable=a3,
                             variable=v,
@@ -242,7 +238,7 @@ def show_current_question():
                             width=20,
                             bd=0,
                             height=4,
-                            value=3).pack()
+                            value=3).grid(row=5, column=0,sticky="nsew")
 
     fourth = Radiobutton(question_frame,textvariable=a4,
                              variable=v,
@@ -251,7 +247,7 @@ def show_current_question():
                              width=20,
                              bd=0,
                              height=4,
-                             value=4).pack()
+                             value=4).grid(row=6, column=0,sticky="nsew")
 
 
     # Submit button handler
@@ -268,9 +264,10 @@ def show_current_question():
         questions_left -= 1
         # Decide when to show score
         if questions_left == 0:
-            global game_counter
+            #global and variable game_counter for testing
+            #global game_counter
             # Player need to restart the client to start new game
-            game_counter = 0
+            #game_counter = 0
             question_frame.destroy()
           
             #sending to server
@@ -282,8 +279,6 @@ def show_current_question():
             
             data = json.loads(group_score)
 
-            #------set scores from data
-            print('Show leaderboard here')
             # SET player scores from the leaderboard's server data
             
             scores['player1'] = data['user1']['score']
@@ -295,7 +290,6 @@ def show_current_question():
             leader_player_two = data['user2']['username']
             leader_player_three = data['user3']['username']
             
-
             # Show leaderboard with updated values from the server
             show_leaderboard().grid(row=0,column=1)
             
@@ -304,8 +298,7 @@ def show_current_question():
             
         # Answer is given
         else:
-            question_frame.pack_forget()
-            print(v.get())# Will print which number was selected
+            question_frame.grid_forget()
             client_socket.recv(1024).decode() 
             client_socket.send(str(v.get()).encode()) #send the answer to server
             client_socket.recv(1024).decode() 
@@ -329,7 +322,7 @@ def show_current_question():
                               width=20,
                               height=3,
                               bd=0,
-                              command=sendToServer).pack()
+                              command=sendToServer).grid(row=7, column=0)
 
     
     question_frame.pack()
@@ -350,7 +343,8 @@ def startGame():
 
 def showInstruction():
     '''Show game instruction'''
-    box.showinfo('Instruction','This game instruction would be added...')
+    # Added game instruction
+    box.showinfo('Instruction','1. Enter username.\n2. Click submit button.\n 3. Answer 10 questions. \n 4. See your score.')
 
 def showCredits():
     '''Show credits. List people who created this game'''
