@@ -1,24 +1,28 @@
 # This is a room for players
-#from Player import *
+from Player import *
+from Quiz import *
+
 class Room:
-    # this tracks how many rooms were created
-    room_number = 0
-    # This set max players in the room
-    room_capacity = 3
+    
+    room_number = 0                             # this tracks how many rooms were created
     
     def __init__(self):
         ''' Constructor '''
-        self.room_id = Room.room_number # Each time room number increased by 1
-        self.players = []
-        self.quizes = []
-        Room.room_number += 1
-
+        Room.room_number += 1                   # increment room number
+        self.room_id = Room.room_number         # each time room number increased by 1
+        self.players = []                       # how many players in the room
+        self.quiz = Quiz()                      # create one quiz for the room     
+    
+    #----------------------------------------------------------------
+    #                   Use methods for any external calls
+    #----------------------------------------------------------------
     def add_player(self,player):
         '''Add player to the room'''
         if len(self.players) < int(Room.room_capacity):
             self.players.append(player)
         else:
             print('Room is full')
+            return -1                           # indicates that the room is full
     
     def __str__(self):
         '''String method for the object'''

@@ -46,12 +46,6 @@ if __name__ == '__main__':
     q.a2 = 'Bee'
     q.a3 = 'No one'
     q.a4 = 'What cake?'
-    q.correct = 1
-    q.received = 2
+    q.correct = '1'
+    q.received = '2'
     print(str(q))
-
-    print('Is the answer received correct?')
-    if q.check_correct:
-        print('Correct')
-    else:
-        print('Incorrect')

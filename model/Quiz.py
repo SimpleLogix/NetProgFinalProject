@@ -1,5 +1,6 @@
 from Question import *
 
+# Creates a Quiq objec out of Question object
 class Quiz():
     '''This class creates a quiz of N questions
        Each playr can have its own pace anwering questions

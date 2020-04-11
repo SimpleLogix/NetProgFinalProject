@@ -5,25 +5,28 @@ import uuid
 
 # This is a player
 class Player:
-    count = 0
-    def __init__(self):
+    count = 0                                               # Keep track of the instances
+    
+    def __init__(self):                                     
         Player.count += 1
         self.port = 7500
-        # The channel of communication with the server
+
+        # ------------------------The channel of communication with the server
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_ip = socket.gethostname()
-        self.username = 'Player' + Player.count
+        self.connect = self.client_socket.connect((self.client_ip, self.port))
+        # -------------------------------------------------------------------
+        self.username = ''
         self.score = '0'
         self.user_id = uuid.uuid1() # Create unique client ID
-        self.connect = self.client_socket.connect((self.client_ip, self.port))
-
-    def register_on_server(self):
+        
+    def register_on_server(self):               # Handler for user registration on the server
         '''Register on the server'''
         self.send_to_server(self.user_id.int)   # send UUID
         self.receive_from_server()              # receive reply
         self.disconnect()                       # close the connection
 
-    def request_game_start():
+    def request_game_start(self):
         '''Start game request'''
         # Receive question from the server
         self.receive_from_server()
@@ -62,7 +65,7 @@ if __name__ == '__main__':
     p1 = Player()
     print(str(p1))
     # Register on the server
-    p1.register_on_server()
+    #p1.register_on_server()
     
     
    
